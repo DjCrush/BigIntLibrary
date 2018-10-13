@@ -8,21 +8,25 @@ BigInt fact(int N);
 
 int main()
 {
-	cout << fact(10000);
+	BigInt a;
+	a = 3;
+	int i = 3;
+	a = a * i;
+	cout << a;
+	//cout << fact(12) << endl;
 	return 0;
 }
 
 
 BigInt fact(int N)
 {
-	BigInt a;
-	a = 1;
-	return { "0" };
+	BigInt a = 1;
 	if (N != 0)
 	{
 		for (int i = 1; i <= N; i++)
 		{
 			a = a * i;
+			cout << a << endl;
 		}
 	}
 	return a;

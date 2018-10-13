@@ -1,9 +1,9 @@
 #include "bigint.h"
 
-BigInt::BigInt() : number("0") 
+BigInt::BigInt() : number("0")
 {}
 
-BigInt::BigInt(const string& N) : number(N) 
+BigInt::BigInt(const string& N) : number(N)
 {}
 
 BigInt::BigInt(const int& rhs) : number(to_string(rhs))
@@ -11,10 +11,11 @@ BigInt::BigInt(const int& rhs) : number(to_string(rhs))
 
 BigInt BigInt::operator=(const int& rhs)
 {
-	return { to_string(rhs) };
+	number = to_string(rhs);
+	return *this;
 }
 
-BigInt BigInt::operator= (const BigInt& rhs) 
+BigInt BigInt::operator= (const BigInt& rhs)
 {
 	if (this == &rhs) {
 		return *this;
@@ -30,7 +31,16 @@ BigInt BigInt::operator-(const BigInt& rhs)
 
 BigInt BigInt::operator-(const int& rhs)
 {
-	return { substraction(number, to_string(rhs) };
+	return { substraction(number, to_string(rhs)) };
+}
+
+BigInt BigInt::operator-=(const BigInt& rhs)
+{
+	return { substraction(number, rhs.number) };
+}
+BigInt BigInt::operator-=(const int& rhs)
+{
+	return { substraction(number, to_string(rhs)) };
 }
 
 BigInt BigInt::operator+(const BigInt& rhs)
@@ -39,6 +49,16 @@ BigInt BigInt::operator+(const BigInt& rhs)
 }
 
 BigInt BigInt::operator+(const int& rhs)
+{
+	return { addition(number, to_string(rhs)) };
+}
+
+BigInt BigInt::operator+=(const BigInt& rhs)
+{
+	return { addition(number, rhs.number) };
+}
+
+BigInt BigInt::operator+=(const int& rhs)
 {
 	return { addition(number, to_string(rhs)) };
 }
@@ -53,29 +73,34 @@ BigInt BigInt::operator*(const int& rhs)
 	return { multiplication(number, to_string(rhs)) };
 }
 
+BigInt BigInt::operator*=(const BigInt& rhs)
+{
+	return { multiplication(number, rhs.number) };
+}
+
+BigInt BigInt::operator*=(const int& rhs)
+{
+	return { multiplication(number, to_string(rhs)) };
+}
+
+
 BigInt BigInt::operator/(const BigInt& rhs)
 {
-
+	return { division(number, rhs.number) };
 }
 BigInt BigInt::operator/(const int& rhs)
 {
-
+	return { division(number, to_string(rhs)) };
 }
-BigInt BigInt::operator+=(const BigInt& rhs)
-{
 
+BigInt BigInt::operator/=(const BigInt& rhs)
+{
+	return { division(number, rhs.number) };
 }
-BigInt BigInt::operator+=(const int& rhs)
-{
 
-}
-BigInt BigInt::operator-=(const BigInt& rhs)
+BigInt BigInt::operator/=(const int& rhs)
 {
-
-}
-BigInt BigInt::operator-=(const int& rhs)
-{
-
+	return { division(number, to_string(rhs)) };
 }
 
 ostream& operator<<(ostream& os, const BigInt& rhs)
@@ -92,7 +117,7 @@ bool BigInt::operator< (BigInt const & rhs)
 	}
 	if (number.length() == rhs.number.length())
 	{
-		
+
 	}
 	return false;
 }
