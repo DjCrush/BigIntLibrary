@@ -1,12 +1,21 @@
 #include "bigint.h"
 
+BigInt::BigInt() : number("0") 
+{}
 
-BigArithmetic::BigInt::BigInt() : number("0") {}
+BigInt::BigInt(const string& N) : number(N) 
+{}
 
-BigArithmetic::BigInt::BigInt(string N) : number(N){}
+BigInt::BigInt(const int& rhs) : number(to_string(rhs))
+{}
 
-BigInt& BigArithmetic::BigInt::operator=(const BigInt& rhs) {
-	//проверка на самоприсваивание
+BigInt BigInt::operator=(const int& rhs)
+{
+	return { to_string(rhs) };
+}
+
+BigInt BigInt::operator= (const BigInt& rhs) 
+{
 	if (this == &rhs) {
 		return *this;
 	}
@@ -14,40 +23,82 @@ BigInt& BigArithmetic::BigInt::operator=(const BigInt& rhs) {
 	return *this;
 }
 
-BigInt BigArithmetic::BigAritmetic::operator-(const BigInt& lhs, const BigInt& rhs)
+BigInt BigInt::operator-(const BigInt& rhs)
 {
-	return BigInt(substraction(lhs.number, rhs.number));
+	return { substraction(number, rhs.number) };
 }
 
-
-const BigInt BigInt::operator+(const BigInt& lhs, const BigInt& rhs)
+BigInt BigInt::operator-(const int& rhs)
 {
-	return BigInt(addition(lhs.number, rhs.number));
+	return { substraction(number, to_string(rhs) };
 }
 
-const BigInt BigInt::operator+(const BigInt& lhs, const int& rhs)
+BigInt BigInt::operator+(const BigInt& rhs)
 {
-	return BigInt(addition(lhs.number, to_string(rhs)));
+	return { addition(number, rhs.number) };
 }
 
-const BigInt BigInt::operator*(const BigInt& lhs, const int& rhs)
+BigInt BigInt::operator+(const int& rhs)
 {
-	return BigInt(multiplication(lhs.number, to_string(rhs)));
+	return { addition(number, to_string(rhs)) };
 }
 
-ostream& BigInt::operator<<(ostream& os, const BigInt& rhs)
+BigInt BigInt::operator*(const BigInt& rhs)
+{
+	return { multiplication(number, rhs.number) };
+}
+
+BigInt BigInt::operator*(const int& rhs)
+{
+	return { multiplication(number, to_string(rhs)) };
+}
+
+BigInt BigInt::operator/(const BigInt& rhs)
+{
+
+}
+BigInt BigInt::operator/(const int& rhs)
+{
+
+}
+BigInt BigInt::operator+=(const BigInt& rhs)
+{
+
+}
+BigInt BigInt::operator+=(const int& rhs)
+{
+
+}
+BigInt BigInt::operator-=(const BigInt& rhs)
+{
+
+}
+BigInt BigInt::operator-=(const int& rhs)
+{
+
+}
+
+ostream& operator<<(ostream& os, const BigInt& rhs)
 {
 	os << rhs.number;
 	return os;
 }
 
-bool BigInt::operator <(BigInt const & lhs, BigInt const & rhs)
+bool BigInt::operator< (BigInt const & rhs)
 {
-	return true;
+	if (number.length() < rhs.number.length())
+	{
+		return true;
+	}
+	if (number.length() == rhs.number.length())
+	{
+		
+	}
+	return false;
 }
 
 
-string addition(string a, string b)
+string BigInt::addition(string a, string b)
 {
 	string res;
 	int carry = 0, c, temp, l;
@@ -84,7 +135,7 @@ string addition(string a, string b)
 	return	res;
 }
 
-string substraction(const string& a, const string& b)
+string BigInt::substraction(string a, string b)
 {
 	string res;
 
@@ -153,7 +204,7 @@ string substraction(const string& a, const string& b)
 }
 
 // light version
-string multiplication(string a, string b)
+string BigInt::multiplication(string a, string b)
 {
 	string result = "0", t_res;
 	for (int i = 0; i < b.length(); i++)
@@ -170,57 +221,13 @@ string multiplication(string a, string b)
 	return	result;
 }
 
-string division(const string& a, const string& b)
+string BigInt::division(string a, string b)
 {
 	string result = "0", t_res;
 
 	return	result;
 }
 
-bool modulo(const string& a, const string& b)
-{
-	bool result;
-
-	return	result;
-
-}
-
-BigInt BigInt::fact(int N)
-{
-	BigInt a("1");
-	if (N != 0)
-	{
-		for (int i = 1; i <= N; i++)
-		{
-			a = a * i;
-		}
-	}
-	return a;
-}
-
-
-string fibonacci(string N)
-{
-	string index = 0;
-	string a, b, c;
-	do {
-		if (index == "0")
-		{
-			a = "0"; b = "0";
-		}
-		if (index == "1")
-		{
-			a = "1";
-		}
-		c = addition(a, b);
-		a = b;
-		b = c;
-		index = addition(index, "1");
-	} while (c != N);
-	return c;
-}
 
 BigInt::~BigInt()
-{
-
-}
+{}
