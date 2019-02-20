@@ -1,5 +1,0 @@
-﻿  Source.cpp
-d:\vc\long_numbers\long_numbers\source.cpp(132): warning C4018: '<': signed/unsigned mismatch
-d:\vc\long_numbers\long_numbers\source.cpp(149): warning C4018: '<': signed/unsigned mismatch
-  Long_numbers.vcxproj -> D:\vc\Long_numbers\Debug\Long_numbers.exe
-  Long_numbers.vcxproj -> D:\vc\Long_numbers\Debug\Long_numbers.pdb (Full PDB)
