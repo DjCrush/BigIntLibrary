@@ -1,7 +1,7 @@
 #include "bigint.h"
 
-BigInt::BigInt(const string& N = "0") : number{ N } {}
-BigInt::BigInt(const int& rhs) : number{ to_string(rhs) }{}
+BigInt::BigInt(const string& rhs = "0") : number{ rhs } {}
+BigInt::BigInt(const int& rhs) : number{ to_string(rhs) } {}
 BigInt& BigInt::operator=(const int& rhs)
 {
 	number = to_string(rhs);
