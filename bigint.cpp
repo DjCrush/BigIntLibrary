@@ -1,528 +1,474 @@
 #include "bigint.h"
 
-BigInt::BigInt(const string& rhs = "0") : number{ rhs } {}
-BigInt::BigInt(const int& rhs) : number{ to_string(rhs) } {}
+BigInt::BigInt(const string& N = "0") : number{ N }, signum{ N[0] == '-' ? true : false } 
+{
+	if (signum == true)
+	{
+		number.erase(0, 1);
+	}
+}
+BigInt::BigInt(const int& N) : number{ to_string(N) }, signum{ N < 0 ? true : false } 
+{
+	if (signum == true)
+	{
+		number.erase(0, 1);
+	}
+}
+BigInt::BigInt(const char* N) : number{ N }, signum { N[0] == '-' ? true : false } 
+{
+	if (signum == true)
+	{
+		number.erase(0, 1);
+	}
+}
 BigInt& BigInt::operator=(const int& rhs)
 {
+	signum = (rhs < 0 ? true : false);
 	number = to_string(rhs);
 	return *this;
 }
 BigInt& BigInt::operator=(const BigInt& rhs)
 {
-	if (this == &rhs)
+	if (this != &rhs)
 	{
-		return *this;
+		signum = rhs.signum;
+		number = rhs.number;
 	}
-	number = rhs.number;
 	return *this;
 }
+
 BigInt operator-(const string& lhs, const BigInt& rhs)
 {
-	return { BigInt::substraction(lhs, rhs.number) };
+	return BigInt(BigInt::substraction(lhs, rhs.number));
 }
+
 BigInt operator-(const BigInt& lhs, const string& rhs)
 {
-	return { BigInt::substraction(lhs.number, rhs) };
+	return BigInt(BigInt::substraction(lhs.number, rhs));
 }
+
 BigInt operator-(const int& lhs, const BigInt& rhs)
 {
-	return { BigInt::substraction(to_string(lhs), rhs.number) };
+	return BigInt(BigInt::substraction(to_string(lhs), rhs.number));
 }
+
 BigInt operator-(const BigInt& lhs, const int& rhs)
 {
-	return { BigInt::substraction(lhs.number, to_string(rhs)) };
+	return BigInt(BigInt::substraction(lhs.number, to_string(rhs)));
 }
+
 BigInt operator-(const BigInt& lhs, const BigInt& rhs)
 {
-	return { BigInt::substraction(lhs.number, rhs.number) };
+	return BigInt(BigInt::substraction(lhs.number, rhs.number));
 }
+
 BigInt& BigInt::operator-=(const BigInt& rhs)
 {
 	number = substraction(number, rhs.number);
 	return *this;
 }
+
 BigInt& BigInt::operator-=(const int& rhs)
 {
 	number = substraction(number, to_string(rhs));
 	return *this;
 }
+
 BigInt& BigInt::operator-=(const string& rhs)
 {
 	number = substraction(number, rhs);
 	return *this;
 }
+
 BigInt operator+(const string& lhs, const BigInt& rhs)
 {
-	return { BigInt::addition(lhs, rhs.number) };
+	return BigInt(BigInt::addition(lhs, rhs.number));
 }
+
 BigInt operator+(const BigInt& lhs, const string& rhs)
 {
-	return { BigInt::addition(lhs.number, rhs) };
+	return BigInt(BigInt::addition(lhs.number, rhs));
 }
+
 BigInt operator+(const int& lhs, const BigInt& rhs)
 {
-	return { BigInt::addition(to_string(lhs), rhs.number) };
+	return BigInt(BigInt::addition(to_string(lhs), rhs.number));
 }
+
 BigInt operator+(const BigInt& lhs, const int& rhs)
 {
-	return { BigInt::addition(lhs.number, to_string(rhs)) };
+	return BigInt(BigInt::addition(lhs.number, to_string(rhs)));
 }
+
 BigInt operator+(const BigInt& lhs, const BigInt& rhs)
 {
-	return { BigInt::addition(lhs.number, rhs.number) };
+	return BigInt(BigInt::addition(lhs.number, rhs.number));
 }
+
 BigInt& BigInt::operator+=(const BigInt& rhs)
 {
 	number = addition(number, rhs.number);
 	return *this;
 }
+
 BigInt& BigInt::operator+=(const int& rhs)
 {
 	number = addition(number, to_string(rhs));
 	return *this;
 }
+
 BigInt& BigInt::operator+=(const string& rhs)
 {
 	number = addition(number, rhs);
 	return *this;
 }
+
 BigInt operator*(const string& lhs, const BigInt& rhs)
 {
-	return { BigInt::multiplication(lhs, rhs.number) };
+	return BigInt(BigInt::multiplication(lhs, rhs.number));
 }
+
 BigInt operator*(const BigInt& lhs, const string& rhs)
 {
-	return { BigInt::multiplication(lhs.number, rhs) };
+	return BigInt(BigInt::multiplication(lhs.number, rhs));
 }
+
 BigInt operator*(const int& lhs, const BigInt& rhs)
 {
-	return { BigInt::multiplication(to_string(lhs), rhs.number) };
+	return BigInt(BigInt::multiplication(to_string(lhs), rhs.number));
 }
+
 BigInt operator*(const BigInt& lhs, const int& rhs)
 {
-	return { BigInt::multiplication(lhs.number, to_string(rhs)) };
+	return BigInt(BigInt::multiplication(lhs.number, to_string(rhs)));
 }
+
 BigInt operator*(const BigInt& lhs, const BigInt& rhs)
 {
-	return { BigInt::multiplication(lhs.number, rhs.number) };
+	return BigInt(BigInt::multiplication(lhs.number, rhs.number));
 }
+
 BigInt& BigInt::operator*=(const BigInt& rhs)
 {
 	number = multiplication(number, rhs.number);
 	return *this;
 }
+
 BigInt& BigInt::operator*=(const int& rhs)
 {
 	number = multiplication(number, to_string(rhs));
 	return *this;
 }
+
 BigInt& BigInt::operator*=(const string& rhs)
 {
 	number = multiplication(number, rhs);
 	return *this;
 }
+
 BigInt operator/(const string& lhs, const BigInt& rhs)
 {
-	return { BigInt::division(lhs, rhs.number) };
+	return BigInt(BigInt::division(lhs, rhs.number));
 }
+
 BigInt operator/(const BigInt& lhs, const string& rhs)
 {
-	return { BigInt::division(lhs.number, rhs) };
+	return BigInt(BigInt::division(lhs.number, rhs));
 }
+
 BigInt operator/(const int& lhs, const BigInt& rhs)
 {
-	return { BigInt::division(to_string(lhs), rhs.number) };
+	return BigInt(BigInt::division(to_string(lhs), rhs.number));
 }
+
 BigInt operator/(const BigInt& lhs, const int& rhs)
 {
-	return { BigInt::division(lhs.number, to_string(rhs)) };
+	return BigInt(BigInt::division(lhs.number, to_string(rhs)));
 }
+
 BigInt operator/(const BigInt& lhs, const BigInt& rhs)
 {
-	return { BigInt::division(lhs.number, rhs.number) };
+	return BigInt(BigInt::division(lhs.number, rhs.number));
 }
+
 BigInt& BigInt::operator/=(const BigInt& rhs)
 {
 	number = division(number, rhs.number);
 	return *this;
 }
+
 BigInt& BigInt::operator/=(const int& rhs)
 {
 	number = division(number, to_string(rhs));
 	return *this;
 }
+
 BigInt& BigInt::operator/=(const string& rhs)
 {
 	number = division(number, rhs);
 	return *this;
 }
+
 BigInt operator%(const string& lhs, const BigInt& rhs)
 {
-	return { BigInt::modulo(lhs, rhs.number) };
+	return BigInt(BigInt::modulo(lhs, rhs.number));
 }
+
 BigInt operator%(const BigInt& lhs, const string& rhs)
 {
-	return { BigInt::modulo(lhs.number, rhs) };
+	return BigInt(BigInt::modulo(lhs.number, rhs));
 }
+
 BigInt operator%(const int& lhs, const BigInt& rhs)
 {
-	return { BigInt::modulo(to_string(lhs), rhs.number) };
+	return BigInt(BigInt::modulo(to_string(lhs), rhs.number));
 }
+
 BigInt operator%(const BigInt& lhs, const int& rhs)
 {
-	return { BigInt::modulo(lhs.number, to_string(rhs)) };
+	return BigInt(BigInt::modulo(lhs.number, to_string(rhs)));
 }
+
 BigInt operator%(const BigInt& lhs, const BigInt& rhs)
 {
-	return { BigInt::modulo(lhs.number, rhs.number) };
+	return BigInt(BigInt::modulo(lhs.number, rhs.number));
 }
+
 BigInt& BigInt::operator%=(const BigInt& rhs)
 {
 	number = modulo(number, rhs.number);
 	return *this;
 }
+
 BigInt& BigInt::operator%=(const int& rhs)
 {
 	number = modulo(number, to_string(rhs));
 	return *this;
 }
+
 BigInt& BigInt::operator%=(const string& rhs)
 {
 	number = modulo(number, rhs);
 	return *this;
 }
+
 ostream& operator<<(ostream& os, const BigInt& rhs)
 {
+	if (rhs.signum == true)
+	{
+		os << '-';
+	}
 	os << rhs.number;
 	return os;
 }
+
+bool operator==(const int& lhs, const BigInt& rhs)
+{
+	if (lhs < 0 && rhs.signum != true || lhs > 0 && rhs.signum != false ) // if first negative and second positive or first positive and second negative
+	{
+		return false;
+	}
+	return to_string(lhs) == rhs.number;
+}
+
+bool operator==(const BigInt& lhs, const int& rhs)
+{
+	return rhs == lhs;
+}
+
+bool operator==(const BigInt& lhs, const string& rhs)
+{
+	if (lhs.signum == true && rhs[0] != '0' || lhs.signum == false && rhs[0] == '0') // if first negative and second positive or first positive and second negative
+	{
+		return false;
+	}
+	if (lhs.number.length() != rhs.length())
+	{
+		return false;
+	}
+	return lhs.number == rhs;
+}
+
+bool operator==(const string& lhs, const BigInt& rhs)
+{
+	return rhs == lhs;
+}
+
+bool operator==(const BigInt& lhs, const BigInt& rhs)
+{
+	if (lhs.signum == true && rhs.signum == false || lhs.signum == false && rhs.signum == true) // if first negative and second positive or first positive and second negative
+	{
+		return false;
+	}
+	if (lhs.number.length() != rhs.number.length())
+	{
+		return false;
+	}
+	return lhs.number == rhs.number;
+}
+
+bool operator!=(const int& lhs, const BigInt& rhs)
+{
+	return !(lhs == rhs);
+}
+
+bool operator!=(const BigInt& lhs, const int& rhs)
+{
+	return !(lhs == rhs);
+}
+
+bool operator!=(const BigInt& lhs, const string& rhs)
+{
+	return !(lhs == rhs);
+}
+
+bool operator!=(const string& lhs, const BigInt& rhs)
+{
+	return !(lhs == rhs);
+}
+
+bool operator!=(const BigInt& lhs, const BigInt& rhs)
+{
+	return !(lhs == rhs);
+}
+
 bool operator<(const int& lhs, const BigInt& rhs)
 {
+	if (lhs < 0 && rhs.signum == false)
+	{
+		return true;
+	}
 	string t = to_string(lhs);
+	if (lhs < 0)
+	{
+		t.erase(0, 1);
+		if (t.length() < rhs.number.length())
+		{
+			return true;
+		}
+		return (t.length() == rhs.number.length() && t > rhs.number);
+	}
 	if (t.length() < rhs.number.length())
 	{
 		return true;
 	}
-	if (t.length() == rhs.number.length() && t < rhs.number)
-	{
-		return true;
-	}
-	return false;
+	return (t.length() == rhs.number.length() && t < rhs.number);
 }
+
 bool operator<(const BigInt& lhs, const int& rhs)
 {
-	string t = to_string(rhs);
-	if (lhs.number.length() < t.length())
-	{
-		return true;
-	}
-	if (lhs.number.length() == t.length() && lhs.number < t)
-	{
-		return true;
-	}
-	return false;
+	return !(rhs < lhs);
 }
+
 bool operator<(const BigInt& lhs, const string& rhs)
 {
 	if (lhs.number.length() < rhs.length())
 	{
 		return true;
 	}
-	if (lhs.number.length() == rhs.length() && lhs.number < rhs)
-	{
-		return true;
-	}
-	return false;
+	return (lhs.number.length() == rhs.length() && lhs.number < rhs);
 }
+
 bool operator<(const string& lhs, const BigInt& rhs)
 {
-	if (lhs.length() < rhs.number.length())
-	{
-		return true;
-	}
-	if (lhs.length() == rhs.number.length() && lhs < rhs.number)
-	{
-		return true;
-	}
-	return false;
+	return !(rhs < lhs);
 }
+
 bool operator<(const BigInt& lhs, const BigInt& rhs)
 {
+	if (lhs.signum == true && rhs.signum == false)
+	{
+		return true;
+	}
+	if (lhs.signum == false && rhs.signum == true)
+	{
+		return false;
+	}
+	if (lhs.signum == true && rhs.signum == true)
+	{
+		if (lhs.number.length() > rhs.number.length())
+		{
+			return true;
+		}
+		return (lhs.number.length() == rhs.number.length() && lhs.number > rhs.number);
+	}
 	if (lhs.number.length() < rhs.number.length())
 	{
 		return true;
 	}
-	if (lhs.number.length() == rhs.number.length() && lhs.number < rhs.number)
-	{
-		return true;
-	}
-	return false;
+	return (lhs.number.length() == rhs.number.length() && lhs.number < rhs.number);
 }
+
+bool operator>(const int& lhs, const BigInt& rhs)
+{
+	return rhs < lhs;
+}
+
+bool operator>(const BigInt& lhs, const int& rhs)
+{
+	return rhs < lhs;
+}
+
+bool operator>(const BigInt& lhs, const string& rhs)
+{
+	return rhs < lhs;
+}
+
+bool operator>(const string& lhs, const BigInt& rhs)
+{
+	return rhs < lhs;
+}
+
+bool operator>(const BigInt& lhs, const BigInt& rhs)
+{
+	return rhs < lhs;
+}
+
 bool operator<=(const int& lhs, const BigInt& rhs)
 {
-	string t = to_string(lhs);
-	if (t.length() < rhs.number.length())
-	{
-		return true;
-	}
-	if (t.length() == rhs.number.length() && t <= rhs.number)
-	{
-		return true;
-	}
-	return false;
+	return !(rhs < lhs);
 }
+
 bool operator<=(const BigInt& lhs, const int& rhs)
 {
-	string t = to_string(rhs);
-	if (lhs.number.length() < t.length())
-	{
-		return true;
-	}
-	if (lhs.number.length() == t.length() && lhs.number <= t)
-	{
-		return true;
-	}
-	return false;
+	return !(rhs < lhs);
 }
 bool operator<=(const BigInt& lhs, const string& rhs)
 {
-	if (lhs.number.length() < rhs.length())
-	{
-		return true;
-	}
-	if (lhs.number.length() == rhs.length() && lhs.number <= rhs)
-	{
-		return true;
-	}
-	return false;
+	return !(rhs < lhs);
 }
 bool operator<=(const string& lhs, const BigInt& rhs)
 {
-	if (lhs.length() < rhs.number.length())
-	{
-		return true;
-	}
-	if (lhs.length() == rhs.number.length() && lhs <= rhs.number)
-	{
-		return true;
-	}
-	return false;
+	return !(rhs < lhs);
 }
 bool operator<=(const BigInt& lhs, const BigInt& rhs)
 {
-	if (lhs.number.length() < rhs.number.length())
-	{
-		return true;
-	}
-	if (lhs.number.length() == rhs.number.length() && lhs.number <= rhs.number)
-	{
-		return true;
-	}
-	return false;
+	return !(rhs < lhs);
 }
-bool operator>(const int& lhs, const BigInt& rhs)
-{
-	string t = to_string(lhs);
-	if (t.length() > rhs.number.length())
-	{
-		return true;
-	}
-	if (t.length() == rhs.number.length() && t > rhs.number)
-	{
-		return true;
-	}
-	return false;
-}
-bool operator>(const BigInt& lhs, const int& rhs)
-{
-	string t = to_string(rhs);
-	if (lhs.number.length() > t.length())
-	{
-		return true;
-	}
-	if (lhs.number.length() == t.length() && lhs.number > t)
-	{
-		return true;
-	}
-	return false;
-}
-bool operator>(const BigInt& lhs, const string& rhs)
-{
-	if (lhs.number.length() > rhs.length())
-	{
-		return true;
-	}
-	if (lhs.number.length() == rhs.length() && lhs.number > rhs)
-	{
-		return true;
-	}
-	return false;
-}
-bool operator>(const string& lhs, const BigInt& rhs)
-{
-	if (lhs.length() > rhs.number.length())
-	{
-		return true;
-	}
-	if (lhs.length() == rhs.number.length() && lhs > rhs.number)
-	{
-		return true;
-	}
-	return false;
-}
-bool operator>(const BigInt& lhs, const BigInt& rhs)
-{
-	if (lhs.number.length() > rhs.number.length())
-	{
-		return true;
-	}
-	if (lhs.number.length() == rhs.number.length() && lhs.number > rhs.number)
-	{
-		return true;
-	}
-	return false;
-}
+
 bool operator>=(const int& lhs, const BigInt& rhs)
 {
-	string t = to_string(lhs);
-	if (t.length() > rhs.number.length())
-	{
-		return true;
-	}
-	if (t.length() == rhs.number.length() && t >= rhs.number)
-	{
-		return true;
-	}
-	return false;
+	return !(lhs < rhs);
 }
+
 bool operator>=(const BigInt& lhs, const int& rhs)
 {
-	string t = to_string(rhs);
-	if (lhs.number.length() > t.length())
-	{
-		return true;
-	}
-	if (lhs.number.length() == t.length() && lhs.number >= t)
-	{
-		return true;
-	}
-	return false;
+	return !(lhs < rhs);
 }
+
 bool operator>=(const BigInt& lhs, const string& rhs)
 {
-	if (lhs.number.length() > rhs.length())
-	{
-		return true;
-	}
-	if (lhs.number.length() == rhs.length() && lhs.number >= rhs)
-	{
-		return true;
-	}
-	return false;
+	return !(lhs < rhs);
 }
+
 bool operator>=(const string& lhs, const BigInt& rhs)
 {
-	if (lhs.length() > rhs.number.length())
-	{
-		return true;
-	}
-	if (lhs.length() == rhs.number.length() && lhs >= rhs.number)
-	{
-		return true;
-	}
-	return false;
+	return !(lhs < rhs);
 }
+
 bool operator>=(const BigInt& lhs, const BigInt& rhs)
 {
-	if (lhs.number.length() > rhs.number.length())
-	{
-		return true;
-	}
-	if (lhs.number.length() == rhs.number.length() && lhs.number >= rhs.number)
-	{
-		return true;
-	}
-	return false;
-}
-bool operator!=(const int& lhs, const BigInt& rhs)
-{
-	if (to_string(lhs) != rhs.number)
-	{
-		return true;
-	}
-	return false;
-}
-bool operator!=(const BigInt& lhs, const int& rhs)
-{
-	if (lhs.number != to_string(rhs))
-	{
-		return true;
-	}
-	return false;
-}
-bool operator!=(const BigInt& lhs, const string& rhs)
-{
-	if (lhs.number != rhs)
-	{
-		return true;
-	}
-	return false;
-}
-bool operator!=(const string& lhs, const BigInt& rhs)
-{
-	if (lhs != rhs.number)
-	{
-		return true;
-	}
-	return false;
-}
-bool operator!=(const BigInt& lhs, const BigInt& rhs)
-{
-	if (lhs.number != rhs.number)
-	{
-		return true;
-	}
-	return false;
-}
-bool operator==(const int& lhs, const BigInt& rhs)
-{
-	if (to_string(lhs) == rhs.number)
-	{
-		return true;
-	}
-	return false;
-}
-bool operator==(const BigInt& lhs, const int& rhs)
-{
-	if (lhs.number == to_string(rhs))
-	{
-		return true;
-	}
-	return false;
-}
-bool operator==(const BigInt& lhs, const string& rhs)
-{
-	if (lhs.number == rhs)
-	{
-		return true;
-	}
-	return false;
-}
-bool operator==(const string& lhs, const BigInt& rhs)
-{
-	if (lhs == rhs.number)
-	{
-		return true;
-	}
-	return false;
-}
-bool operator==(const BigInt& lhs, const BigInt& rhs)
-{
-	if (lhs.number == rhs.number)
-	{
-		return true;
-	}
-	return false;
+	return !(lhs < rhs);
 }
 
 string BigInt::addition(string a, string b)
