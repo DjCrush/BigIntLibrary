@@ -39,17 +39,21 @@ BigInt& BigInt::operator=(const BigInt& rhs)
 
 BigInt operator-(const string& lhs, const BigInt& rhs)
 {
-	return BigInt(BigInt::substraction(lhs, rhs.number));
+	if (lhs[0] == '-' && rhs.signum == false)
+	{
+
+	}
+	return { BigInt::substraction(lhs, rhs.number) };
 }
 
 BigInt operator-(const BigInt& lhs, const string& rhs)
 {
-	return BigInt(BigInt::substraction(lhs.number, rhs));
+	return { BigInt::substraction(lhs.number, rhs) };
 }
 
 BigInt operator-(const int& lhs, const BigInt& rhs)
 {
-	return BigInt(BigInt::substraction(to_string(lhs), rhs.number));
+	return { to_string(lhs) - rhs };
 }
 
 BigInt operator-(const BigInt& lhs, const int& rhs)
@@ -82,27 +86,27 @@ BigInt& BigInt::operator-=(const string& rhs)
 
 BigInt operator+(const string& lhs, const BigInt& rhs)
 {
-	return BigInt(BigInt::addition(lhs, rhs.number));
+	return { BigInt::addition(lhs, rhs.number) };
 }
 
 BigInt operator+(const BigInt& lhs, const string& rhs)
 {
-	return BigInt(BigInt::addition(lhs.number, rhs));
+	return { rhs + lhs };
 }
 
 BigInt operator+(const int& lhs, const BigInt& rhs)
 {
-	return BigInt(BigInt::addition(to_string(lhs), rhs.number));
+	return { BigInt::addition(to_string(lhs), rhs.number) };
 }
 
 BigInt operator+(const BigInt& lhs, const int& rhs)
 {
-	return BigInt(BigInt::addition(lhs.number, to_string(rhs)));
+	return { rhs + lhs };
 }
 
 BigInt operator+(const BigInt& lhs, const BigInt& rhs)
 {
-	return BigInt(BigInt::addition(lhs.number, rhs.number));
+	return { BigInt::addition(lhs.number, rhs.number) };
 }
 
 BigInt& BigInt::operator+=(const BigInt& rhs)
@@ -125,22 +129,22 @@ BigInt& BigInt::operator+=(const string& rhs)
 
 BigInt operator*(const string& lhs, const BigInt& rhs)
 {
-	return BigInt(BigInt::multiplication(lhs, rhs.number));
+	return { BigInt::multiplication(lhs, rhs.number) };
 }
 
 BigInt operator*(const BigInt& lhs, const string& rhs)
 {
-	return BigInt(BigInt::multiplication(lhs.number, rhs));
+	return { rhs * lhs };
 }
 
 BigInt operator*(const int& lhs, const BigInt& rhs)
 {
-	return BigInt(BigInt::multiplication(to_string(lhs), rhs.number));
+	return { BigInt::multiplication(to_string(lhs), rhs.number) };
 }
 
 BigInt operator*(const BigInt& lhs, const int& rhs)
 {
-	return BigInt(BigInt::multiplication(lhs.number, to_string(rhs)));
+	return { rhs * lhs };
 }
 
 BigInt operator*(const BigInt& lhs, const BigInt& rhs)
