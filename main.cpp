@@ -1,4 +1,4 @@
-// long numbers v 1.1
+// long numbers v 1.3
 #include <iostream>
 #include "bigint.h"
 using namespace std;
