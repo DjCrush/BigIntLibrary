@@ -6,10 +6,11 @@ using namespace std;
 class BigInt
 {
 public:
-	BigInt(const string&);
-	BigInt(const int&);
-	BigInt& operator=(const BigInt&);
-	BigInt& operator=(const int&);
+	BigInt(const string& rhs);
+	BigInt(const int& rhs);
+	BigInt(const char* rhs);
+	BigInt& operator=(const BigInt& rhs);
+	BigInt& operator=(const int& rhs);
 	BigInt& operator-=(const BigInt&);
 	BigInt& operator-=(const int&);
 	BigInt& operator-=(const string&);
@@ -25,9 +26,9 @@ public:
 	BigInt& operator%=(const BigInt&);
 	BigInt& operator%=(const int&);
 	BigInt& operator%=(const string&);
-
 private:
 	string number;
+	bool signum;
 	friend ostream& operator << (ostream&, const BigInt&);
 	friend BigInt operator+(const string&, const BigInt&);
 	friend BigInt operator+(const BigInt&, const string&);
@@ -54,6 +55,11 @@ private:
 	friend BigInt operator%(const int&, const BigInt&);
 	friend BigInt operator%(const BigInt&, const int&);
 	friend BigInt operator%(const BigInt&, const BigInt&);
+	friend bool operator==(const int&, const BigInt&);
+	friend bool operator==(const BigInt&, const int&);
+	friend bool operator==(const BigInt&, const string&);
+	friend bool operator==(const string&, const BigInt&);
+	friend bool operator==(const BigInt&, const BigInt&);
 	friend bool operator!=(const int&, const BigInt&);
 	friend bool operator!=(const BigInt&, const int&);
 	friend bool operator!=(const BigInt&, const string&);
@@ -64,26 +70,21 @@ private:
 	friend bool operator<(const BigInt&, const string&);
 	friend bool operator<(const string&, const BigInt&);
 	friend bool operator<(const BigInt&, const BigInt&);
-	friend bool operator<=(const int&, const BigInt&);
-	friend bool operator<=(const BigInt&, const int&);
-	friend bool operator<=(const BigInt&, const string&);
-	friend bool operator<=(const string&, const BigInt&);
-	friend bool operator<=(const BigInt&, const BigInt&);
 	friend bool operator>(const int&, const BigInt&);
 	friend bool operator>(const BigInt&, const int&);
 	friend bool operator>(const BigInt&, const string&);
 	friend bool operator>(const string&, const BigInt&);
 	friend bool operator>(const BigInt&, const BigInt&);
+	friend bool operator<=(const int&, const BigInt&);
+	friend bool operator<=(const BigInt&, const int&);
+	friend bool operator<=(const BigInt&, const string&);
+	friend bool operator<=(const string&, const BigInt&);
+	friend bool operator<=(const BigInt&, const BigInt&);
 	friend bool operator>=(const int&, const BigInt&);
 	friend bool operator>=(const BigInt&, const int&);
 	friend bool operator>=(const BigInt&, const string&);
 	friend bool operator>=(const string&, const BigInt&);
 	friend bool operator>=(const BigInt&, const BigInt&);
-	friend bool operator==(const int&, const BigInt&);
-	friend bool operator==(const BigInt&, const int&);
-	friend bool operator==(const BigInt&, const string&);
-	friend bool operator==(const string&, const BigInt&);
-	friend bool operator==(const BigInt&, const BigInt&);
 	static string addition(string, string);
 	static string substraction(const string&, const string&);
 	static string division(string, string);
