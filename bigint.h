@@ -1,93 +1,95 @@
-#pragma once
+#ifndef _BIGINT_H_
+#define _BIGINT_H_
+
 #include <string>
 #include <iostream>
-using namespace std;
 
 class BigInt
 {
 public:
-	BigInt(const string& rhs);
-	BigInt(const int& rhs);
+	BigInt();
+	BigInt(const std::string& rhs);
+	BigInt(const int rhs);
 	BigInt(const char* rhs);
 	BigInt& operator=(const BigInt& rhs);
-	BigInt& operator=(const int& rhs);
 	BigInt& operator-=(const BigInt&);
 	BigInt& operator-=(const int&);
-	BigInt& operator-=(const string&);
+	BigInt& operator-=(const std::string&);
 	BigInt& operator+=(const BigInt&);
 	BigInt& operator+=(const int&);
-	BigInt& operator+=(const string&);
+	BigInt& operator+=(const std::string&);
 	BigInt& operator*=(const BigInt&);
 	BigInt& operator*=(const int&);
-	BigInt& operator*=(const string&);
+	BigInt& operator*=(const std::string&);
 	BigInt& operator/=(const BigInt&);
 	BigInt& operator/=(const int&);
-	BigInt& operator/=(const string&);
+	BigInt& operator/=(const std::string&);
 	BigInt& operator%=(const BigInt&);
 	BigInt& operator%=(const int&);
-	BigInt& operator%=(const string&);
+	BigInt& operator%=(const std::string&);
 private:
-	string number;
-	bool signum;
-	friend ostream& operator << (ostream&, const BigInt&);
-	friend BigInt operator+(const string&, const BigInt&);
-	friend BigInt operator+(const BigInt&, const string&);
+	std::string number;
+	friend std::ostream& operator << (std::ostream&, const BigInt&);
+	friend BigInt operator+(const std::string&, const BigInt&);
+	friend BigInt operator+(const BigInt&, const std::string&);
 	friend BigInt operator+(const int&, const BigInt&);
 	friend BigInt operator+(const BigInt&, const int&);
 	friend BigInt operator+(const BigInt&, const BigInt&);
-	friend BigInt operator-(const string&, const BigInt&);
-	friend BigInt operator-(const BigInt&, const string&);
+	friend BigInt operator-(const std::string&, const BigInt&);
+	friend BigInt operator-(const BigInt&, const std::string&);
 	friend BigInt operator-(const int&, const BigInt&);
 	friend BigInt operator-(const BigInt&, const int&);
 	friend BigInt operator-(const BigInt&, const BigInt&);
-	friend BigInt operator*(const string&, const BigInt&);
-	friend BigInt operator*(const BigInt&, const string&);
+	friend BigInt operator*(const std::string&, const BigInt&);
+	friend BigInt operator*(const BigInt&, const std::string&);
 	friend BigInt operator*(const int&, const BigInt&);
 	friend BigInt operator*(const BigInt&, const int&);
 	friend BigInt operator*(const BigInt&, const BigInt&);
-	friend BigInt operator/(const string&, const BigInt&);
-	friend BigInt operator/(const BigInt&, const string&);
+	friend BigInt operator/(const std::string&, const BigInt&);
+	friend BigInt operator/(const BigInt&, const std::string&);
 	friend BigInt operator/(const int&, const BigInt&);
 	friend BigInt operator/(const BigInt&, const int&);
 	friend BigInt operator/(const BigInt&, const BigInt&);
-	friend BigInt operator%(const string&, const BigInt&);
-	friend BigInt operator%(const BigInt&, const string&);
+	friend BigInt operator%(const std::string&, const BigInt&);
+	friend BigInt operator%(const BigInt&, const std::string&);
 	friend BigInt operator%(const int&, const BigInt&);
 	friend BigInt operator%(const BigInt&, const int&);
 	friend BigInt operator%(const BigInt&, const BigInt&);
 	friend bool operator==(const int&, const BigInt&);
 	friend bool operator==(const BigInt&, const int&);
-	friend bool operator==(const BigInt&, const string&);
-	friend bool operator==(const string&, const BigInt&);
+	friend bool operator==(const BigInt&, const std::string&);
+	friend bool operator==(const std::string&, const BigInt&);
 	friend bool operator==(const BigInt&, const BigInt&);
 	friend bool operator!=(const int&, const BigInt&);
 	friend bool operator!=(const BigInt&, const int&);
-	friend bool operator!=(const BigInt&, const string&);
-	friend bool operator!=(const string&, const BigInt&);
+	friend bool operator!=(const BigInt&, const std::string&);
+	friend bool operator!=(const std::string&, const BigInt&);
 	friend bool operator!=(const BigInt&, const BigInt&);
 	friend bool operator<(const int&, const BigInt&);
 	friend bool operator<(const BigInt&, const int&);
-	friend bool operator<(const BigInt&, const string&);
-	friend bool operator<(const string&, const BigInt&);
+	friend bool operator<(const BigInt&, const std::string&);
+	friend bool operator<(const std::string&, const BigInt&);
 	friend bool operator<(const BigInt&, const BigInt&);
 	friend bool operator>(const int&, const BigInt&);
 	friend bool operator>(const BigInt&, const int&);
-	friend bool operator>(const BigInt&, const string&);
-	friend bool operator>(const string&, const BigInt&);
+	friend bool operator>(const BigInt&, const std::string&);
+	friend bool operator>(const std::string&, const BigInt&);
 	friend bool operator>(const BigInt&, const BigInt&);
 	friend bool operator<=(const int&, const BigInt&);
 	friend bool operator<=(const BigInt&, const int&);
-	friend bool operator<=(const BigInt&, const string&);
-	friend bool operator<=(const string&, const BigInt&);
+	friend bool operator<=(const BigInt&, const std::string&);
+	friend bool operator<=(const std::string&, const BigInt&);
 	friend bool operator<=(const BigInt&, const BigInt&);
 	friend bool operator>=(const int&, const BigInt&);
 	friend bool operator>=(const BigInt&, const int&);
-	friend bool operator>=(const BigInt&, const string&);
-	friend bool operator>=(const string&, const BigInt&);
+	friend bool operator>=(const BigInt&, const std::string&);
+	friend bool operator>=(const std::string&, const BigInt&);
 	friend bool operator>=(const BigInt&, const BigInt&);
-	static string addition(string, string);
-	static string substraction(const string&, const string&);
-	static string division(string, string);
-	static string multiplication(string, const string&);
-	static string modulo(string, string);
+	static std::string addition(std::string, std::string);
+	static std::string substraction(const std::string&, const std::string&);
+	static std::string division(std::string, std::string);
+	static std::string multiplication(std::string, const std::string&);
+	static std::string modulo(std::string, std::string);
 };
+
+#endif
