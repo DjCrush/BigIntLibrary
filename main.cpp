@@ -1,8 +1,7 @@
 // long numbers v 1.3
 #include <iostream>
-#include <thread>
-#include "bigint.h"
 #include <chrono>
+#include "bigint.h"
 
 BigInt fact(int N)
 {
