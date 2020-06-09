@@ -7,10 +7,10 @@
 class BigInt
 {
 public:
-	BigInt();
-	BigInt(const std::string& rhs);
-	BigInt(const int rhs);
-	BigInt(const char* rhs);
+	BigInt(const std::string& N);
+	BigInt(const int& N);
+	BigInt(const char* N);
+	BigInt& operator=(const int& rhs);
 	BigInt& operator=(const BigInt& rhs);
 	BigInt& operator-=(const BigInt&);
 	BigInt& operator-=(const int&);
@@ -29,6 +29,7 @@ public:
 	BigInt& operator%=(const std::string&);
 private:
 	std::string number;
+	bool signum;
 	friend std::ostream& operator << (std::ostream&, const BigInt&);
 	friend BigInt operator+(const std::string&, const BigInt&);
 	friend BigInt operator+(const BigInt&, const std::string&);
