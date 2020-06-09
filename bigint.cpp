@@ -1,20 +1,20 @@
 #include "bigint.h"
 
-BigInt::BigInt(const string& N = "0") : number{ N }, signum{ N[0] == '-' ? true : false } 
+BigInt::BigInt(const std::string& N = "0") : number{ N }, signum{ N[0] == '-' ? true : false }
 {
 	if (signum == true)
 	{
 		number.erase(0, 1);
 	}
 }
-BigInt::BigInt(const int& N) : number{ to_string(N) }, signum{ N < 0 ? true : false } 
+BigInt::BigInt(const int& N) : number{ std::to_string(N) }, signum{ N < 0 ? true : false }
 {
 	if (signum == true)
 	{
 		number.erase(0, 1);
 	}
 }
-BigInt::BigInt(const char* N) : number{ N }, signum { N[0] == '-' ? true : false } 
+BigInt::BigInt(const char* N) : number{ N }, signum{ N[0] == '-' ? true : false }
 {
 	if (signum == true)
 	{
@@ -24,7 +24,7 @@ BigInt::BigInt(const char* N) : number{ N }, signum { N[0] == '-' ? true : false
 BigInt& BigInt::operator=(const int& rhs)
 {
 	signum = (rhs < 0 ? true : false);
-	number = to_string(rhs);
+	number = std::to_string(rhs);
 	return *this;
 }
 BigInt& BigInt::operator=(const BigInt& rhs)
@@ -37,7 +37,7 @@ BigInt& BigInt::operator=(const BigInt& rhs)
 	return *this;
 }
 
-BigInt operator-(const string& lhs, const BigInt& rhs)
+BigInt operator-(const std::string& lhs, const BigInt& rhs)
 {
 	if (lhs[0] == '-' && rhs.signum == false)
 	{
@@ -46,19 +46,19 @@ BigInt operator-(const string& lhs, const BigInt& rhs)
 	return { BigInt::substraction(lhs, rhs.number) };
 }
 
-BigInt operator-(const BigInt& lhs, const string& rhs)
+BigInt operator-(const BigInt& lhs, const std::string& rhs)
 {
 	return { BigInt::substraction(lhs.number, rhs) };
 }
 
 BigInt operator-(const int& lhs, const BigInt& rhs)
 {
-	return { to_string(lhs) - rhs };
+	return { std::to_string(lhs) - rhs };
 }
 
 BigInt operator-(const BigInt& lhs, const int& rhs)
 {
-	return BigInt(BigInt::substraction(lhs.number, to_string(rhs)));
+	return BigInt(BigInt::substraction(lhs.number, std::to_string(rhs)));
 }
 
 BigInt operator-(const BigInt& lhs, const BigInt& rhs)
@@ -74,29 +74,29 @@ BigInt& BigInt::operator-=(const BigInt& rhs)
 
 BigInt& BigInt::operator-=(const int& rhs)
 {
-	number = substraction(number, to_string(rhs));
+	number = substraction(number, std::to_string(rhs));
 	return *this;
 }
 
-BigInt& BigInt::operator-=(const string& rhs)
+BigInt& BigInt::operator-=(const std::string& rhs)
 {
 	number = substraction(number, rhs);
 	return *this;
 }
 
-BigInt operator+(const string& lhs, const BigInt& rhs)
+BigInt operator+(const std::string& lhs, const BigInt& rhs)
 {
 	return { BigInt::addition(lhs, rhs.number) };
 }
 
-BigInt operator+(const BigInt& lhs, const string& rhs)
+BigInt operator+(const BigInt& lhs, const std::string& rhs)
 {
 	return { rhs + lhs };
 }
 
 BigInt operator+(const int& lhs, const BigInt& rhs)
 {
-	return { BigInt::addition(to_string(lhs), rhs.number) };
+	return { BigInt::addition(std::to_string(lhs), rhs.number) };
 }
 
 BigInt operator+(const BigInt& lhs, const int& rhs)
@@ -117,29 +117,29 @@ BigInt& BigInt::operator+=(const BigInt& rhs)
 
 BigInt& BigInt::operator+=(const int& rhs)
 {
-	number = addition(number, to_string(rhs));
+	number = addition(number, std::to_string(rhs));
 	return *this;
 }
 
-BigInt& BigInt::operator+=(const string& rhs)
+BigInt& BigInt::operator+=(const std::string& rhs)
 {
 	number = addition(number, rhs);
 	return *this;
 }
 
-BigInt operator*(const string& lhs, const BigInt& rhs)
+BigInt operator*(const std::string& lhs, const BigInt& rhs)
 {
 	return { BigInt::multiplication(lhs, rhs.number) };
 }
 
-BigInt operator*(const BigInt& lhs, const string& rhs)
+BigInt operator*(const BigInt& lhs, const std::string& rhs)
 {
 	return { rhs * lhs };
 }
 
 BigInt operator*(const int& lhs, const BigInt& rhs)
 {
-	return { BigInt::multiplication(to_string(lhs), rhs.number) };
+	return { BigInt::multiplication(std::to_string(lhs), rhs.number) };
 }
 
 BigInt operator*(const BigInt& lhs, const int& rhs)
@@ -160,34 +160,34 @@ BigInt& BigInt::operator*=(const BigInt& rhs)
 
 BigInt& BigInt::operator*=(const int& rhs)
 {
-	number = multiplication(number, to_string(rhs));
+	number = multiplication(number, std::to_string(rhs));
 	return *this;
 }
 
-BigInt& BigInt::operator*=(const string& rhs)
+BigInt& BigInt::operator*=(const std::string& rhs)
 {
 	number = multiplication(number, rhs);
 	return *this;
 }
 
-BigInt operator/(const string& lhs, const BigInt& rhs)
+BigInt operator/(const std::string& lhs, const BigInt& rhs)
 {
 	return BigInt(BigInt::division(lhs, rhs.number));
 }
 
-BigInt operator/(const BigInt& lhs, const string& rhs)
+BigInt operator/(const BigInt& lhs, const std::string& rhs)
 {
 	return BigInt(BigInt::division(lhs.number, rhs));
 }
 
 BigInt operator/(const int& lhs, const BigInt& rhs)
 {
-	return BigInt(BigInt::division(to_string(lhs), rhs.number));
+	return BigInt(BigInt::division(std::to_string(lhs), rhs.number));
 }
 
 BigInt operator/(const BigInt& lhs, const int& rhs)
 {
-	return BigInt(BigInt::division(lhs.number, to_string(rhs)));
+	return BigInt(BigInt::division(lhs.number, std::to_string(rhs)));
 }
 
 BigInt operator/(const BigInt& lhs, const BigInt& rhs)
@@ -203,34 +203,34 @@ BigInt& BigInt::operator/=(const BigInt& rhs)
 
 BigInt& BigInt::operator/=(const int& rhs)
 {
-	number = division(number, to_string(rhs));
+	number = division(number, std::to_string(rhs));
 	return *this;
 }
 
-BigInt& BigInt::operator/=(const string& rhs)
+BigInt& BigInt::operator/=(const std::string& rhs)
 {
 	number = division(number, rhs);
 	return *this;
 }
 
-BigInt operator%(const string& lhs, const BigInt& rhs)
+BigInt operator%(const std::string& lhs, const BigInt& rhs)
 {
 	return BigInt(BigInt::modulo(lhs, rhs.number));
 }
 
-BigInt operator%(const BigInt& lhs, const string& rhs)
+BigInt operator%(const BigInt& lhs, const std::string& rhs)
 {
 	return BigInt(BigInt::modulo(lhs.number, rhs));
 }
 
 BigInt operator%(const int& lhs, const BigInt& rhs)
 {
-	return BigInt(BigInt::modulo(to_string(lhs), rhs.number));
+	return BigInt(BigInt::modulo(std::to_string(lhs), rhs.number));
 }
 
 BigInt operator%(const BigInt& lhs, const int& rhs)
 {
-	return BigInt(BigInt::modulo(lhs.number, to_string(rhs)));
+	return BigInt(BigInt::modulo(lhs.number, std::to_string(rhs)));
 }
 
 BigInt operator%(const BigInt& lhs, const BigInt& rhs)
@@ -246,17 +246,17 @@ BigInt& BigInt::operator%=(const BigInt& rhs)
 
 BigInt& BigInt::operator%=(const int& rhs)
 {
-	number = modulo(number, to_string(rhs));
+	number = modulo(number, std::to_string(rhs));
 	return *this;
 }
 
-BigInt& BigInt::operator%=(const string& rhs)
+BigInt& BigInt::operator%=(const std::string& rhs)
 {
 	number = modulo(number, rhs);
 	return *this;
 }
 
-ostream& operator<<(ostream& os, const BigInt& rhs)
+std::ostream& operator<<(std::ostream& os, const BigInt& rhs)
 {
 	if (rhs.signum == true)
 	{
@@ -268,11 +268,11 @@ ostream& operator<<(ostream& os, const BigInt& rhs)
 
 bool operator==(const int& lhs, const BigInt& rhs)
 {
-	if (lhs < 0 && rhs.signum != true || lhs > 0 && rhs.signum != false ) // if first negative and second positive or first positive and second negative
+	if (lhs < 0 && rhs.signum != true || lhs > 0 && rhs.signum != false) // if first negative and second positive or first positive and second negative
 	{
 		return false;
 	}
-	return to_string(lhs) == rhs.number;
+	return std::to_string(lhs) == rhs.number;
 }
 
 bool operator==(const BigInt& lhs, const int& rhs)
@@ -280,7 +280,7 @@ bool operator==(const BigInt& lhs, const int& rhs)
 	return rhs == lhs;
 }
 
-bool operator==(const BigInt& lhs, const string& rhs)
+bool operator==(const BigInt& lhs, const std::string& rhs)
 {
 	if (lhs.signum == true && rhs[0] != '0' || lhs.signum == false && rhs[0] == '0') // if first negative and second positive or first positive and second negative
 	{
@@ -293,7 +293,7 @@ bool operator==(const BigInt& lhs, const string& rhs)
 	return lhs.number == rhs;
 }
 
-bool operator==(const string& lhs, const BigInt& rhs)
+bool operator==(const std::string& lhs, const BigInt& rhs)
 {
 	return rhs == lhs;
 }
@@ -321,12 +321,12 @@ bool operator!=(const BigInt& lhs, const int& rhs)
 	return !(lhs == rhs);
 }
 
-bool operator!=(const BigInt& lhs, const string& rhs)
+bool operator!=(const BigInt& lhs, const std::string& rhs)
 {
 	return !(lhs == rhs);
 }
 
-bool operator!=(const string& lhs, const BigInt& rhs)
+bool operator!=(const std::string& lhs, const BigInt& rhs)
 {
 	return !(lhs == rhs);
 }
@@ -342,7 +342,7 @@ bool operator<(const int& lhs, const BigInt& rhs)
 	{
 		return true;
 	}
-	string t = to_string(lhs);
+	std::string t = std::to_string(lhs);
 	if (lhs < 0)
 	{
 		t.erase(0, 1);
@@ -364,7 +364,7 @@ bool operator<(const BigInt& lhs, const int& rhs)
 	return !(rhs < lhs);
 }
 
-bool operator<(const BigInt& lhs, const string& rhs)
+bool operator<(const BigInt& lhs, const std::string& rhs)
 {
 	if (lhs.number.length() < rhs.length())
 	{
@@ -373,7 +373,7 @@ bool operator<(const BigInt& lhs, const string& rhs)
 	return (lhs.number.length() == rhs.length() && lhs.number < rhs);
 }
 
-bool operator<(const string& lhs, const BigInt& rhs)
+bool operator<(const std::string& lhs, const BigInt& rhs)
 {
 	return !(rhs < lhs);
 }
@@ -413,12 +413,12 @@ bool operator>(const BigInt& lhs, const int& rhs)
 	return rhs < lhs;
 }
 
-bool operator>(const BigInt& lhs, const string& rhs)
+bool operator>(const BigInt& lhs, const std::string& rhs)
 {
 	return rhs < lhs;
 }
 
-bool operator>(const string& lhs, const BigInt& rhs)
+bool operator>(const std::string& lhs, const BigInt& rhs)
 {
 	return rhs < lhs;
 }
@@ -437,11 +437,11 @@ bool operator<=(const BigInt& lhs, const int& rhs)
 {
 	return !(rhs < lhs);
 }
-bool operator<=(const BigInt& lhs, const string& rhs)
+bool operator<=(const BigInt& lhs, const std::string& rhs)
 {
 	return !(rhs < lhs);
 }
-bool operator<=(const string& lhs, const BigInt& rhs)
+bool operator<=(const std::string& lhs, const BigInt& rhs)
 {
 	return !(rhs < lhs);
 }
@@ -460,12 +460,12 @@ bool operator>=(const BigInt& lhs, const int& rhs)
 	return !(lhs < rhs);
 }
 
-bool operator>=(const BigInt& lhs, const string& rhs)
+bool operator>=(const BigInt& lhs, const std::string& rhs)
 {
 	return !(lhs < rhs);
 }
 
-bool operator>=(const string& lhs, const BigInt& rhs)
+bool operator>=(const std::string& lhs, const BigInt& rhs)
 {
 	return !(lhs < rhs);
 }
@@ -475,9 +475,9 @@ bool operator>=(const BigInt& lhs, const BigInt& rhs)
 	return !(lhs < rhs);
 }
 
-string BigInt::addition(string a, string b)
+std::string BigInt::addition(std::string a, std::string b)
 {
-	string res;
+	std::string res;
 	int carry = 0, c, temp, l;
 	if (a.length() >= b.length())
 	{
@@ -512,14 +512,12 @@ string BigInt::addition(string a, string b)
 	return	res;
 }
 
-string BigInt::substraction(const string& a, const string& b)
+std::string BigInt::substraction(const std::string& a, const std::string& b)
 {
-	string res;
-
+	std::string res;
 	int carry = 0, c;
 	int a_l = a.length();
 	int b_l = b.length();
-
 	if (a_l >= b_l)
 	{
 		for (int i = 1; i <= a_l; i++)
@@ -571,7 +569,7 @@ string BigInt::substraction(const string& a, const string& b)
 	if (res.length() > 1)
 	{
 		auto it = res.find_last_of("123456789");
-		if (it == string::npos)
+		if (it == std::string::npos)
 		{
 			return "0";
 		}
@@ -588,9 +586,9 @@ string BigInt::substraction(const string& a, const string& b)
 }
 
 // simple version
-string BigInt::multiplication(string a, const string& b)
+std::string BigInt::multiplication(std::string a, const std::string& b)
 {
-	string result = "0", t_res;
+	std::string result = "0", t_res;
 	for (int i = 1; i <= b.length(); i++)
 	{
 		int l = b[b.length() - i];
@@ -606,14 +604,14 @@ string BigInt::multiplication(string a, const string& b)
 }
 
 // division. v1.0
-string BigInt::division(string a, string b)
+std::string BigInt::division(std::string a, std::string b)
 {
 	if (a.length() < b.length() || (a.length() == b.length() && a < b))
 	{
 		return "0";
 	}
-	string result = "0";
-	string zero(a.length() - b.length(), '0');
+	std::string result = "0";
+	std::string zero(a.length() - b.length(), '0');
 	int b_length = b.length();
 	b += zero;
 	if (a < b && b.length() > b_length)
@@ -642,14 +640,14 @@ string BigInt::division(string a, string b)
 	return result + zero;
 }
 
-string BigInt::modulo(string a, string b)
+std::string BigInt::modulo(std::string a, std::string b)
 {
 	if (a.length() < b.length() || (a.length() == b.length() && a < b))
 	{
 		return a;
 	}
-	string result = "0";
-	string zero(a.length() - b.length(), '0');
+	std::string result = "0";
+	std::string zero(a.length() - b.length(), '0');
 	int b_length = b.length();
 	b += zero;
 	if (a < b && b.length() > b_length)
