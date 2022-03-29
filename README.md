@@ -1,2 +1,2 @@
 # BigIntLibrary
-Library for working witn long numbers (Version 1.0)
+Library for working with large numbers (Version 1.0)
