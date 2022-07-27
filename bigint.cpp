@@ -1,569 +1,270 @@
 #include "bigint.h"
+#include <iostream>
 
-BigInt::BigInt(const std::string& N = "0") : number{ N }, signum{ N[0] == '-' ? true : false }
+BigInteger::BigInteger(const std::string& sNumber) : m_sNumber{sNumber }, m_bSignum{sNumber[0] == '-' }
 {
-	if (signum == true)
+	if (m_bSignum)
 	{
-		number.erase(0, 1);
+		m_sNumber.erase(0, 1);
 	}
 }
-BigInt::BigInt(const int& N) : number{ std::to_string(N) }, signum{ N < 0 ? true : false }
+BigInteger::BigInteger(int iNumber) : m_sNumber{std::to_string(iNumber) }, m_bSignum{iNumber < 0 }
 {
-	if (signum == true)
+	if (m_bSignum)
 	{
-		number.erase(0, 1);
+		m_sNumber.erase(0, 1);
 	}
 }
-BigInt::BigInt(const char* N) : number{ N }, signum{ N[0] == '-' ? true : false }
+
+BigInteger::BigInteger(const char* lpszNumber) : m_sNumber{lpszNumber }, m_bSignum{lpszNumber[0] == '-' }
 {
-	if (signum == true)
+	if (m_bSignum)
 	{
-		number.erase(0, 1);
+		m_sNumber.erase(0, 1);
 	}
 }
-BigInt& BigInt::operator=(const int& rhs)
-{
-	signum = (rhs < 0 ? true : false);
-	number = std::to_string(rhs);
-	return *this;
-}
-BigInt& BigInt::operator=(const BigInt& rhs)
+
+BigInteger& BigInteger::operator = (const BigInteger& rhs)
 {
 	if (this != &rhs)
 	{
-		signum = rhs.signum;
-		number = rhs.number;
+        m_bSignum = rhs.m_bSignum;
+        m_sNumber = rhs.m_sNumber;
 	}
 	return *this;
 }
 
-BigInt operator-(const std::string& lhs, const BigInt& rhs)
+BigInteger& BigInteger::operator -= (const BigInteger& rhs)
 {
-	if (lhs[0] == '-' && rhs.signum == false)
-	{
-
-	}
-	return { BigInt::substraction(lhs, rhs.number) };
+    m_sNumber = substraction(m_sNumber, rhs.m_sNumber);
+    return *this;
 }
 
-BigInt operator-(const BigInt& lhs, const std::string& rhs)
+BigInteger& BigInteger::operator += (const BigInteger& rhs)
 {
-	return { BigInt::substraction(lhs.number, rhs) };
+    m_sNumber = addition(m_sNumber, rhs.m_sNumber);
+    return *this;
 }
 
-BigInt operator-(const int& lhs, const BigInt& rhs)
+BigInteger& BigInteger::operator *= (const BigInteger& rhs)
 {
-	return { std::to_string(lhs) - rhs };
+    m_sNumber = multiplication(m_sNumber, rhs.m_sNumber);
+    return *this;
 }
 
-BigInt operator-(const BigInt& lhs, const int& rhs)
+BigInteger& BigInteger::operator /= (const BigInteger& rhs)
 {
-	return BigInt(BigInt::substraction(lhs.number, std::to_string(rhs)));
+    m_sNumber = division(m_sNumber, rhs.m_sNumber);
+    return *this;
 }
 
-BigInt operator-(const BigInt& lhs, const BigInt& rhs)
+BigInteger& BigInteger::operator %= (const BigInteger& rhs)
 {
-	return BigInt(BigInt::substraction(lhs.number, rhs.number));
+    m_sNumber = modulo(m_sNumber, rhs.m_sNumber);
+    return *this;
 }
 
-BigInt& BigInt::operator-=(const BigInt& rhs)
+BigInteger& BigInteger::operator ++ ()
 {
-	number = substraction(number, rhs.number);
-	return *this;
+    if(m_bSignum)
+    {
+        m_sNumber = substraction(m_sNumber, "1");
+    }
+    else
+    {
+        m_sNumber = addition(m_sNumber, "1");
+    }
+    if(m_sNumber == "0")
+    {
+        m_bSignum = false;
+    }
+    return *this;
 }
 
-BigInt& BigInt::operator-=(const int& rhs)
+BigInteger BigInteger::operator ++ (int)
 {
-	number = substraction(number, std::to_string(rhs));
-	return *this;
+    BigInteger temp = *this;
+    ++*this;
+    return temp;
 }
 
-BigInt& BigInt::operator-=(const std::string& rhs)
+BigInteger& BigInteger::operator -- ()
 {
-	number = substraction(number, rhs);
-	return *this;
+    if(m_sNumber == "0")
+    {
+        m_bSignum = true;
+    }
+    if(m_bSignum)
+    {
+        m_sNumber = addition(m_sNumber, "1");
+    }
+    else
+    {
+        m_sNumber = substraction(m_sNumber, "1");
+    }
+    return *this;
 }
 
-BigInt operator+(const std::string& lhs, const BigInt& rhs)
+BigInteger BigInteger::operator -- (int)
 {
-	return { BigInt::addition(lhs, rhs.number) };
+    BigInteger temp = *this;
+    --*this;
+    return temp;
 }
 
-BigInt operator+(const BigInt& lhs, const std::string& rhs)
+std::ostream& operator << (std::ostream& os, const BigInteger& rhs)
 {
-	return { rhs + lhs };
+    if (rhs.m_bSignum)
+    {
+        os << '-';
+    }
+    os << rhs.m_sNumber;
+    return os;
 }
 
-BigInt operator+(const int& lhs, const BigInt& rhs)
+BigInteger operator - (const BigInteger& lhs, const BigInteger& rhs)
 {
-	return { BigInt::addition(std::to_string(lhs), rhs.number) };
+	return BigInteger(BigInteger::substraction(lhs.m_sNumber, rhs.m_sNumber));
 }
 
-BigInt operator+(const BigInt& lhs, const int& rhs)
+BigInteger operator + (const BigInteger& lhs, const BigInteger& rhs)
 {
-	return { rhs + lhs };
+	return {BigInteger::addition(lhs.m_sNumber, rhs.m_sNumber) };
 }
 
-BigInt operator+(const BigInt& lhs, const BigInt& rhs)
+BigInteger operator * (const BigInteger& lhs, const BigInteger& rhs)
 {
-	return { BigInt::addition(lhs.number, rhs.number) };
+	return BigInteger(BigInteger::multiplication(lhs.m_sNumber, rhs.m_sNumber));
 }
 
-BigInt& BigInt::operator+=(const BigInt& rhs)
+BigInteger operator / (const BigInteger& lhs, const BigInteger& rhs)
 {
-	number = addition(number, rhs.number);
-	return *this;
+	return BigInteger(BigInteger::division(lhs.m_sNumber, rhs.m_sNumber));
 }
 
-BigInt& BigInt::operator+=(const int& rhs)
+BigInteger operator % (const BigInteger& lhs, const BigInteger& rhs)
 {
-	number = addition(number, std::to_string(rhs));
-	return *this;
+	return BigInteger(BigInteger::modulo(lhs.m_sNumber, rhs.m_sNumber));
 }
 
-BigInt& BigInt::operator+=(const std::string& rhs)
+bool operator == (const BigInteger& lhs, const BigInteger& rhs)
 {
-	number = addition(number, rhs);
-	return *this;
-}
-
-BigInt operator*(const std::string& lhs, const BigInt& rhs)
-{
-	return { BigInt::multiplication(lhs, rhs.number) };
-}
-
-BigInt operator*(const BigInt& lhs, const std::string& rhs)
-{
-	return { rhs * lhs };
-}
-
-BigInt operator*(const int& lhs, const BigInt& rhs)
-{
-	return { BigInt::multiplication(std::to_string(lhs), rhs.number) };
-}
-
-BigInt operator*(const BigInt& lhs, const int& rhs)
-{
-	return { rhs * lhs };
-}
-
-BigInt operator*(const BigInt& lhs, const BigInt& rhs)
-{
-	return BigInt(BigInt::multiplication(lhs.number, rhs.number));
-}
-
-BigInt& BigInt::operator*=(const BigInt& rhs)
-{
-	number = multiplication(number, rhs.number);
-	return *this;
-}
-
-BigInt& BigInt::operator*=(const int& rhs)
-{
-	number = multiplication(number, std::to_string(rhs));
-	return *this;
-}
-
-BigInt& BigInt::operator*=(const std::string& rhs)
-{
-	number = multiplication(number, rhs);
-	return *this;
-}
-
-BigInt operator/(const std::string& lhs, const BigInt& rhs)
-{
-	return BigInt(BigInt::division(lhs, rhs.number));
-}
-
-BigInt operator/(const BigInt& lhs, const std::string& rhs)
-{
-	return BigInt(BigInt::division(lhs.number, rhs));
-}
-
-BigInt operator/(const int& lhs, const BigInt& rhs)
-{
-	return BigInt(BigInt::division(std::to_string(lhs), rhs.number));
-}
-
-BigInt operator/(const BigInt& lhs, const int& rhs)
-{
-	return BigInt(BigInt::division(lhs.number, std::to_string(rhs)));
-}
-
-BigInt operator/(const BigInt& lhs, const BigInt& rhs)
-{
-	return BigInt(BigInt::division(lhs.number, rhs.number));
-}
-
-BigInt& BigInt::operator/=(const BigInt& rhs)
-{
-	number = division(number, rhs.number);
-	return *this;
-}
-
-BigInt& BigInt::operator/=(const int& rhs)
-{
-	number = division(number, std::to_string(rhs));
-	return *this;
-}
-
-BigInt& BigInt::operator/=(const std::string& rhs)
-{
-	number = division(number, rhs);
-	return *this;
-}
-
-BigInt operator%(const std::string& lhs, const BigInt& rhs)
-{
-	return BigInt(BigInt::modulo(lhs, rhs.number));
-}
-
-BigInt operator%(const BigInt& lhs, const std::string& rhs)
-{
-	return BigInt(BigInt::modulo(lhs.number, rhs));
-}
-
-BigInt operator%(const int& lhs, const BigInt& rhs)
-{
-	return BigInt(BigInt::modulo(std::to_string(lhs), rhs.number));
-}
-
-BigInt operator%(const BigInt& lhs, const int& rhs)
-{
-	return BigInt(BigInt::modulo(lhs.number, std::to_string(rhs)));
-}
-
-BigInt operator%(const BigInt& lhs, const BigInt& rhs)
-{
-	return BigInt(BigInt::modulo(lhs.number, rhs.number));
-}
-
-BigInt& BigInt::operator%=(const BigInt& rhs)
-{
-	number = modulo(number, rhs.number);
-	return *this;
-}
-
-BigInt& BigInt::operator%=(const int& rhs)
-{
-	number = modulo(number, std::to_string(rhs));
-	return *this;
-}
-
-BigInt& BigInt::operator%=(const std::string& rhs)
-{
-	number = modulo(number, rhs);
-	return *this;
-}
-
-std::ostream& operator<<(std::ostream& os, const BigInt& rhs)
-{
-	if (rhs.signum == true)
-	{
-		os << '-';
-	}
-	os << rhs.number;
-	return os;
-}
-
-bool operator==(const int& lhs, const BigInt& rhs)
-{
-	if (lhs < 0 && rhs.signum != true || lhs > 0 && rhs.signum != false) // if first negative and second positive or first positive and second negative
+	if (lhs.m_bSignum != rhs.m_bSignum || lhs.m_sNumber.length() != rhs.m_sNumber.length())
 	{
 		return false;
 	}
-	return std::to_string(lhs) == rhs.number;
+	return lhs.m_sNumber == rhs.m_sNumber;
 }
 
-bool operator==(const BigInt& lhs, const int& rhs)
-{
-	return rhs == lhs;
-}
-
-bool operator==(const BigInt& lhs, const std::string& rhs)
-{
-	if (lhs.signum == true && rhs[0] != '0' || lhs.signum == false && rhs[0] == '0') // if first negative and second positive or first positive and second negative
-	{
-		return false;
-	}
-	if (lhs.number.length() != rhs.length())
-	{
-		return false;
-	}
-	return lhs.number == rhs;
-}
-
-bool operator==(const std::string& lhs, const BigInt& rhs)
-{
-	return rhs == lhs;
-}
-
-bool operator==(const BigInt& lhs, const BigInt& rhs)
-{
-	if (lhs.signum == true && rhs.signum == false || lhs.signum == false && rhs.signum == true) // if first negative and second positive or first positive and second negative
-	{
-		return false;
-	}
-	if (lhs.number.length() != rhs.number.length())
-	{
-		return false;
-	}
-	return lhs.number == rhs.number;
-}
-
-bool operator!=(const int& lhs, const BigInt& rhs)
+bool operator != (const BigInteger& lhs, const BigInteger& rhs)
 {
 	return !(lhs == rhs);
 }
 
-bool operator!=(const BigInt& lhs, const int& rhs)
+bool operator < (const BigInteger& lhs, const BigInteger& rhs)
 {
-	return !(lhs == rhs);
-}
-
-bool operator!=(const BigInt& lhs, const std::string& rhs)
-{
-	return !(lhs == rhs);
-}
-
-bool operator!=(const std::string& lhs, const BigInt& rhs)
-{
-	return !(lhs == rhs);
-}
-
-bool operator!=(const BigInt& lhs, const BigInt& rhs)
-{
-	return !(lhs == rhs);
-}
-
-bool operator<(const int& lhs, const BigInt& rhs)
-{
-	if (lhs < 0 && rhs.signum == false)
+	if (lhs.m_bSignum && !rhs.m_bSignum)
 	{
 		return true;
 	}
-	std::string t = std::to_string(lhs);
-	if (lhs < 0)
+	if (!lhs.m_bSignum && rhs.m_bSignum)
 	{
-		t.erase(0, 1);
-		if (t.length() < rhs.number.length())
+		return false;
+	}
+	if (lhs.m_bSignum && rhs.m_bSignum)
+	{
+		if (lhs.m_sNumber.length() > rhs.m_sNumber.length())
 		{
 			return true;
 		}
-		return (t.length() == rhs.number.length() && t > rhs.number);
+		return (lhs.m_sNumber.length() == rhs.m_sNumber.length() && lhs.m_sNumber > rhs.m_sNumber);
 	}
-	if (t.length() < rhs.number.length())
+	if (lhs.m_sNumber.length() < rhs.m_sNumber.length())
 	{
 		return true;
 	}
-	return (t.length() == rhs.number.length() && t < rhs.number);
+	return (lhs.m_sNumber.length() == rhs.m_sNumber.length() && lhs.m_sNumber < rhs.m_sNumber);
 }
 
-bool operator<(const BigInt& lhs, const int& rhs)
-{
-	return !(rhs < lhs);
-}
-
-bool operator<(const BigInt& lhs, const std::string& rhs)
-{
-	if (lhs.number.length() < rhs.length())
-	{
-		return true;
-	}
-	return (lhs.number.length() == rhs.length() && lhs.number < rhs);
-}
-
-bool operator<(const std::string& lhs, const BigInt& rhs)
-{
-	return !(rhs < lhs);
-}
-
-bool operator<(const BigInt& lhs, const BigInt& rhs)
-{
-	if (lhs.signum == true && rhs.signum == false)
-	{
-		return true;
-	}
-	if (lhs.signum == false && rhs.signum == true)
-	{
-		return false;
-	}
-	if (lhs.signum == true && rhs.signum == true)
-	{
-		if (lhs.number.length() > rhs.number.length())
-		{
-			return true;
-		}
-		return (lhs.number.length() == rhs.number.length() && lhs.number > rhs.number);
-	}
-	if (lhs.number.length() < rhs.number.length())
-	{
-		return true;
-	}
-	return (lhs.number.length() == rhs.number.length() && lhs.number < rhs.number);
-}
-
-bool operator>(const int& lhs, const BigInt& rhs)
+bool operator > (const BigInteger& lhs, const BigInteger& rhs)
 {
 	return rhs < lhs;
 }
 
-bool operator>(const BigInt& lhs, const int& rhs)
-{
-	return rhs < lhs;
-}
-
-bool operator>(const BigInt& lhs, const std::string& rhs)
-{
-	return rhs < lhs;
-}
-
-bool operator>(const std::string& lhs, const BigInt& rhs)
-{
-	return rhs < lhs;
-}
-
-bool operator>(const BigInt& lhs, const BigInt& rhs)
-{
-	return rhs < lhs;
-}
-
-bool operator<=(const int& lhs, const BigInt& rhs)
+bool operator <= (const BigInteger& lhs, const BigInteger& rhs)
 {
 	return !(rhs < lhs);
 }
 
-bool operator<=(const BigInt& lhs, const int& rhs)
-{
-	return !(rhs < lhs);
-}
-bool operator<=(const BigInt& lhs, const std::string& rhs)
-{
-	return !(rhs < lhs);
-}
-bool operator<=(const std::string& lhs, const BigInt& rhs)
-{
-	return !(rhs < lhs);
-}
-bool operator<=(const BigInt& lhs, const BigInt& rhs)
-{
-	return !(rhs < lhs);
-}
-
-bool operator>=(const int& lhs, const BigInt& rhs)
+bool operator >= (const BigInteger& lhs, const BigInteger& rhs)
 {
 	return !(lhs < rhs);
 }
 
-bool operator>=(const BigInt& lhs, const int& rhs)
+std::string BigInteger::addition(std::string lhs, std::string rhs)
 {
-	return !(lhs < rhs);
+	if (lhs.length() > rhs.length())
+	{
+		swap(lhs, rhs);
+	}
+	int iLhsLength = lhs.length();
+	int iRhsLength = rhs.length();
+    std::string sResult;
+    bool bCarry = false;
+	for (size_t i = 1; i <= iRhsLength; i++)
+	{
+        int iDigit = (iLhsLength - i) >= 0 ?
+                (lhs[iLhsLength - i] - '0') + (rhs[iRhsLength - i] - '0') + bCarry :
+                (rhs[iRhsLength - i] - '0') + bCarry;
+        bCarry = iDigit > 9;
+        sResult += bCarry ? (iDigit - 10) + '0' : iDigit + '0';
+	}
+	if (bCarry)
+	{
+        sResult += '1';
+	}
+	size_t length = sResult.length() >> 1;
+	for (int i = 0; i < length; i++)
+	{
+        std::swap(sResult[i], sResult[sResult.length() - i - 1]);
+	}
+	return	sResult;
 }
 
-bool operator>=(const BigInt& lhs, const std::string& rhs)
-{
-	return !(lhs < rhs);
-}
-
-bool operator>=(const std::string& lhs, const BigInt& rhs)
-{
-	return !(lhs < rhs);
-}
-
-bool operator>=(const BigInt& lhs, const BigInt& rhs)
-{
-	return !(lhs < rhs);
-}
-
-std::string BigInt::addition(std::string a, std::string b)
+std::string BigInteger::substraction(const std::string& lhs, const std::string& rhs)
 {
 	std::string res;
-	int carry = 0, c, temp, l;
-	if (a.length() >= b.length())
+	int iLhsLength = lhs.length();
+	int iRhsLength = rhs.length();
+    bool bCarry = false;
+	if (iLhsLength >= iRhsLength)
 	{
-		swap(a, b);
-	}
-	int a_l = a.length();
-	int b_l = b.length();
-	for (int i = 1; i <= b_l; i++)
-	{
-		if ((a_l - i) >= 0)
+		for (int i = 1; i <= iLhsLength; ++i)
 		{
-			c = (a.at(a_l - i) - '0') + (b.at(b_l - i) - '0') + carry;
-		}
-		else
-		{
-			c = (b.at(b_l - i) - '0') + carry;
-		}
-		carry = c / 10;
-		res += (c % 10) + '0';
-	}
-	if (carry > 0)
-	{
-		res += (c / 10) + '0';
-	}
-	l = res.length() >> 1;
-	for (int i = 0; i < l; i++)
-	{
-		temp = res[i];
-		res[i] = res[res.length() - 1 - i];
-		res[res.length() - 1 - i] = temp;
-	}
-	return	res;
-}
-
-std::string BigInt::substraction(const std::string& a, const std::string& b)
-{
-	std::string res;
-	int carry = 0, c;
-	int a_l = a.length();
-	int b_l = b.length();
-	if (a_l >= b_l)
-	{
-		for (int i = 1; i <= a_l; i++)
-		{
-			if ((b_l - i) >= 0)
+			int iDigit = (iRhsLength - i) >= 0 ?
+				(lhs[iLhsLength - i] - '0') - (rhs[iRhsLength - i] - '0') - bCarry :
+				(lhs[iLhsLength - i] - '0') - bCarry;
+            bCarry = iDigit < 0;
+			if (bCarry)
 			{
-				c = (a.at(a_l - i) - '0') - (b.at(b_l - i) - '0') - carry;
+				iDigit += 10;
 			}
-			else
-			{
-				c = (a.at(a_l - i) - '0') - carry;
-			}
-			if (c < 0)
-			{
-				c += 10;
-				carry = 1;
-			}
-			else
-			{
-				carry = 0;
-			}
-			res += (c % 10) + '0';
+			res += iDigit + '0';
 		}
 	}
 	else
 	{
-		for (int i = 1; i < b_l; i++)
+		for (size_t i = 1; i < iRhsLength; ++i)
 		{
-			if ((a_l - i) >= 0)
+            int iDigit = (iLhsLength - i) >= 0 ?
+				(lhs[iLhsLength - i] - '0') + (rhs[iRhsLength - i] - '0') - bCarry :
+				(rhs[iRhsLength - i] - '0') - bCarry;
+            bCarry = iDigit < 0;
+			if (bCarry)
 			{
-				c = (a.at(a_l - i) - '0') + (b.at(b_l - i) - '0') - carry;
+				iDigit += 10;
 			}
-			else
-			{
-				c = (b.at(b_l - i) - '0') - carry;
-			}
-			if (c < 0)
-			{
-				c += 10;
-				carry = 1;
-			}
-			else
-			{
-				carry = 0;
-			}
-			res += (c % 10) + '0';
+			res += iDigit + '0';
 		}
 	}
 	if (res.length() > 1)
@@ -575,36 +276,16 @@ std::string BigInt::substraction(const std::string& a, const std::string& b)
 		}
 		res.erase(res.begin() + it + 1, res.end());
 	}
-	int l = res.length() >> 1;
-	for (int i = 0; i < l; i++)
+	size_t length = res.length() >> 1;
+	for (size_t i = 0; i < length; ++i)
 	{
-		char temp = res[i];
-		res[i] = res[res.length() - 1 - i];
-		res[res.length() - 1 - i] = temp;
+        std::swap(res[i], res[res.length() - 1 - i]);
 	}
 	return	res;
 }
 
-// simple version
-std::string BigInt::multiplication(std::string a, const std::string& b)
-{
-	std::string result = "0", t_res;
-	for (int i = 1; i <= b.length(); i++)
-	{
-		int l = b[b.length() - i];
-		t_res = "0";
-		for (int i1 = '0'; i1 < l; i1++)
-		{
-			t_res = addition(a, t_res);
-		}
-		result = addition(result, t_res);
-		a = a + "0";
-	}
-	return	result;
-}
-
 // division. v1.0
-std::string BigInt::division(std::string a, std::string b)
+std::string BigInteger::division(std::string a, std::string b)
 {
 	if (a.length() < b.length() || (a.length() == b.length() && a < b))
 	{
@@ -640,38 +321,56 @@ std::string BigInt::division(std::string a, std::string b)
 	return result + zero;
 }
 
-std::string BigInt::modulo(std::string a, std::string b)
+// simple version
+std::string BigInteger::multiplication(std::string lhs, const std::string& rhs)
 {
-	if (a.length() < b.length() || (a.length() == b.length() && a < b))
+    std::string result = "0";
+    for (int i = 1; i <= rhs.length(); ++i)
+    {
+        int l = rhs[rhs.length() - i];
+        std::string interimResult = "0";
+        for (int i1 = '0'; i1 < l; ++i1)
+        {
+            interimResult = addition(lhs, interimResult);
+        }
+        result = addition(result, interimResult);
+        lhs = lhs + "0";
+    }
+    return	result;
+}
+
+std::string BigInteger::modulo(std::string lhs, std::string rhs)
+{
+	if (lhs.length() < rhs.length() || (lhs.length() == rhs.length() && lhs < rhs))
 	{
-		return a;
+		return lhs;
 	}
 	std::string result = "0";
-	std::string zero(a.length() - b.length(), '0');
-	int b_length = b.length();
-	b += zero;
-	if (a < b && b.length() > b_length)
+	std::string zero(lhs.length() - rhs.length(), '0');
+	int iRhsLength = rhs.length();
+    rhs += zero;
+	if (lhs < rhs && rhs.length() > iRhsLength)
 	{
-		b.pop_back();
+		rhs.pop_back();
 		zero.pop_back();
 	}
 	do
 	{
-		if (a >= b && a.length() == b.length() || a.length() > b.length())
+		if (lhs >= rhs && lhs.length() == rhs.length() || lhs.length() > rhs.length())
 		{
-			a = substraction(a, b);
+            lhs = substraction(lhs, rhs);
 			result = addition(result, "1");
 		}
-		if ((a < b && a.length() == b.length() && b_length < b.length()) || (a.length() < b.length() && b.length() > b_length))
+		if ((lhs < rhs && lhs.length() == rhs.length() && iRhsLength < rhs.length()) || (lhs.length() < rhs.length() && rhs.length() > iRhsLength))
 		{
-			b.pop_back();
+			rhs.pop_back();
 			zero.pop_back();
 			result += "0";
 		}
-		if (a == "0" || (a.length() < b.length() && b.length() == b_length) || (a < b && b.length() == b_length && a.length() == b.length()))
+		if (lhs == "0" || (lhs.length() < rhs.length() && rhs.length() == iRhsLength) || (lhs < rhs && rhs.length() == iRhsLength && lhs.length() == rhs.length()))
 		{
 			break;
 		}
 	} while (true);
-	return a;
+	return lhs;
 }

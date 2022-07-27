@@ -3,10 +3,10 @@
 #include <chrono>
 #include "bigint.h"
 
-BigInt fact(int N)
+BigInteger fact(int N)
 {
-	BigInt a = 1;
-	for (int i = 1; i <= N; i++)
+	BigInteger a = 1;
+	for (BigInteger i = 1; i <= N; ++i)
 	{
 		a *= i;
 	}
@@ -15,9 +15,19 @@ BigInt fact(int N)
 
 int main()
 {
-	std::chrono::high_resolution_clock::time_point time_begin = std::chrono::high_resolution_clock::now();
-	std::cout << fact(1000) << std::endl;
-	std::chrono::high_resolution_clock::time_point time_end = std::chrono::high_resolution_clock::now();
-	std::cout << std::chrono::duration_cast<std::chrono::microseconds>(time_end - time_begin).count();
+    std::cout << "20! = " << fact(20) << std::endl;
+    std::cout << "30! = " << fact(30) << std::endl;
+    std::cout << "1000! = " << fact(1000) << std::endl;
+    for(BigInteger i = -1000; i <= 1000; i++)
+    {
+        std::cout << i << "   ";
+    }
+    std::cout << '\n';
+    BigInteger i = 1000;
+    for(; i >= 1; i--)
+    {
+        std::cout << i << ' ';
+    }
+    std::cout << i << '\n';
 	return 0;
 }
