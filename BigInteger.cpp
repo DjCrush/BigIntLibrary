@@ -5,17 +5,35 @@
 
 BigInteger::BigInteger() : m_sNumber("0"), m_bSignum(false) {}
 
-BigInteger::BigInteger(const std::string& sNumber) : m_bSignum{ sNumber[0] == '-' }
+BigInteger::BigInteger(const std::string& sNumber)
 {
+    if(sNumber.empty())
+    {
+        throw std::exception();
+    }
+    m_bSignum = sNumber[0] == '-';
     for (size_t i = m_bSignum ? 1 : 0; i < sNumber.size(); ++i)
     {
         m_sNumber += sNumber[i];
     }
 }
 
+BigInteger::BigInteger(unsigned iNumber) : m_bSignum{ false }
+{
+    while (iNumber)
+    {
+        m_sNumber = static_cast<char>((iNumber % 10) + '0') + m_sNumber;
+        iNumber /= 10;
+    }
+    if (m_sNumber.empty())
+    {
+        m_sNumber = "0";
+    }
+}
+
 BigInteger::BigInteger(int iNumber) : m_bSignum{ iNumber < 0 }
 {
-    if(m_bSignum)
+    if (m_bSignum)
     {
         iNumber = -iNumber;
     }
@@ -24,11 +42,50 @@ BigInteger::BigInteger(int iNumber) : m_bSignum{ iNumber < 0 }
         m_sNumber = static_cast<char>((iNumber % 10) + '0') + m_sNumber;
         iNumber /= 10;
     }
+    if (m_sNumber.empty())
+    {
+        m_sNumber = "0";
+    }
 }
 
-BigInteger::BigInteger(const char* lpszNumber) : m_bSignum{ lpszNumber[0] == '-' }
+BigInteger::BigInteger(uint64_t iNumber) : m_bSignum{ false }
 {
-    for (size_t i = m_bSignum ? 1 : 0; lpszNumber[i] != 0; ++i)
+    while (iNumber)
+    {
+        m_sNumber = static_cast<char>((iNumber % 10) + '0') + m_sNumber;
+        iNumber /= 10;
+    }
+    if (m_sNumber.empty())
+    {
+        m_sNumber = "0";
+    }
+}
+
+BigInteger::BigInteger(int64_t iNumber) : m_bSignum{ iNumber < 0 }
+{
+    if (m_bSignum)
+    {
+        iNumber = -iNumber;
+    }
+    while (iNumber)
+    {
+        m_sNumber = static_cast<char>((iNumber % 10) + '0') + m_sNumber;
+        iNumber /= 10;
+    }
+    if(m_sNumber.empty())
+    {
+        m_sNumber = "0";
+    }
+}
+
+BigInteger::BigInteger(const char* lpszNumber)
+{
+    if(lpszNumber[0] == 0)
+    {
+        throw std::exception();
+    }
+    m_bSignum = lpszNumber[0] == '-';
+	for (size_t i = m_bSignum ? 1 : 0; lpszNumber[i] != 0; ++i)
     {
         m_sNumber += lpszNumber[i];
     }
@@ -383,31 +440,25 @@ BigInteger operator * (const BigInteger& lhs, const BigInteger& rhs)
 
 BigInteger operator / (const BigInteger& lhs, const BigInteger& rhs)
 {
-    BigInteger result;
-    if (rhs.m_sNumber != "0")
-    {
-        result.m_sNumber = BigInteger::Division(lhs.m_sNumber, rhs.m_sNumber);
-        result.m_bSignum = lhs.m_bSignum != rhs.m_bSignum;
-    }
-    else
+    if(rhs.m_sNumber == "0")
     {
         throw std::exception();
     }
+    BigInteger result;
+    result.m_sNumber = BigInteger::Division(lhs.m_sNumber, rhs.m_sNumber);
+    result.m_bSignum = lhs.m_bSignum != rhs.m_bSignum;
     return result;
 }
 
 BigInteger operator % (const BigInteger& lhs, const BigInteger& rhs)
 {
-    BigInteger result;
-    if (rhs.m_sNumber != "0")
-    {
-        result.m_sNumber = BigInteger::Remainder(lhs.m_sNumber, rhs.m_sNumber);
-        result.m_bSignum = lhs.m_bSignum != rhs.m_bSignum;
-    }
-    else
+    if (rhs.m_sNumber == "0")
     {
         throw std::exception();
     }
+    BigInteger result;
+    result.m_sNumber = BigInteger::Remainder(lhs.m_sNumber, rhs.m_sNumber);
+    result.m_bSignum = lhs.m_bSignum != rhs.m_bSignum;
     return result;
 }
 
@@ -486,7 +537,7 @@ std::string BigInteger::Addition(const std::string& lhs, const std::string& rhs)
 	    {
 	        int iDigit = i <= iRhsLength ?
 	            (lhs[iLhsLength - i] - '0') + (rhs[iRhsLength - i] - '0') + bCarry :
-	            (rhs[iLhsLength - i] - '0') + bCarry;
+	            (lhs[iLhsLength - i] - '0') + bCarry;
 	        bCarry = iDigit > 9;
 	        sResult += bCarry ? (iDigit - 10) + '0' : iDigit + '0';
 	    }
@@ -511,7 +562,7 @@ std::string BigInteger::Addition(const std::string& lhs, const std::string& rhs)
     {
         std::swap(sResult[i], sResult[sResult.length() - i - 1]);
     }
-    return sResult;
+    return	sResult;
 }
 
 std::string BigInteger::Subtraction(const std::string& lhs, const std::string& rhs)
@@ -552,10 +603,11 @@ std::string BigInteger::Subtraction(const std::string& lhs, const std::string& r
     }
     if (sResult.length() > 1)
     {
+        // remove non-significant zeros at the beginning of the number
         auto it = sResult.find_last_of("123456789");
         if (it == std::string::npos)
         {
-            return "0";
+            return "0"; // if the result consists of zeros, then we return zero
         }
         sResult.erase(sResult.begin() + it + 1, sResult.end());
     }
