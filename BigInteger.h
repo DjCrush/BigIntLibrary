@@ -6,14 +6,17 @@ class BigInteger
 public:
 	BigInteger();
 	BigInteger(const std::string& sNumber);
+	BigInteger(unsigned iNumber);
 	BigInteger(int iNumber);
+	BigInteger(uint64_t iNumber);
+	BigInteger(int64_t iNumber);
 	BigInteger(const char* lpszNumber);
 
-	BigInteger& operator -= (const BigInteger& rhs);
-	BigInteger& operator += (const BigInteger& rhs);
-	BigInteger& operator *= (const BigInteger& rhs);
-	BigInteger& operator /= (const BigInteger& rhs);
-	BigInteger& operator %= (const BigInteger& rhs);
+	BigInteger& operator -= (const BigInteger&);
+	BigInteger& operator += (const BigInteger&);
+	BigInteger& operator *= (const BigInteger&);
+	BigInteger& operator /= (const BigInteger&);
+	BigInteger& operator %= (const BigInteger&);
 
 	BigInteger& operator ++ ();
 	BigInteger operator ++ (int);
@@ -23,21 +26,21 @@ public:
 private:
 	std::string m_sNumber;
 	bool m_bSignum;
-	friend std::ostream& operator << (std::ostream& lhs, const BigInteger& rhs);
-	friend BigInteger operator + (const BigInteger& lhs, const BigInteger& rhs);
-	friend BigInteger operator - (const BigInteger& lhs, const BigInteger& rhs);
-	friend BigInteger operator * (const BigInteger& lhs, const BigInteger& rhs);
-	friend BigInteger operator / (const BigInteger& lhs, const BigInteger& rhs);
-	friend BigInteger operator % (const BigInteger& lhs, const BigInteger& rhs);
-	friend bool operator == (const BigInteger& lhs, const BigInteger& rhs);
-	friend bool operator != (const BigInteger& lhs, const BigInteger& rhs);
-	friend bool operator <  (const BigInteger& lhs, const BigInteger& rhs);
-	friend bool operator >  (const BigInteger& lhs, const BigInteger& rhs);
-	friend bool operator <= (const BigInteger& lhs, const BigInteger& rhs);
-	friend bool operator >= (const BigInteger& lhs, const BigInteger& rhs);
-	static std::string Addition(const std::string& lhs, const std::string& rhs);
-	static std::string Subtraction(const std::string& lhs, const std::string& rhs);
-	static std::string Multiplication(std::string lhs, const std::string& rhs);
-	static std::string Division(std::string lhs, std::string rhs);
-	static std::string Remainder(std::string lhs, std::string rhs);
+	friend std::ostream& operator << (std::ostream&, const BigInteger&);
+	friend BigInteger operator + (const BigInteger&, const BigInteger&);
+	friend BigInteger operator - (const BigInteger&, const BigInteger&);
+	friend BigInteger operator * (const BigInteger&, const BigInteger&);
+	friend BigInteger operator / (const BigInteger&, const BigInteger&);
+	friend BigInteger operator % (const BigInteger&, const BigInteger&);
+	friend bool operator == (const BigInteger&, const BigInteger&);
+	friend bool operator != (const BigInteger&, const BigInteger&);
+	friend bool operator <  (const BigInteger&, const BigInteger&);
+	friend bool operator >  (const BigInteger&, const BigInteger&);
+	friend bool operator <= (const BigInteger&, const BigInteger&);
+	friend bool operator >= (const BigInteger&, const BigInteger&);
+	static std::string Addition(const std::string&, const std::string&);
+	static std::string Subtraction(const std::string&, const std::string&);
+	static std::string Multiplication(std::string, const std::string&);
+	static std::string Division(std::string, std::string);
+	static std::string Remainder(std::string, std::string);
 };
