@@ -15,6 +15,10 @@ BigInteger::BigInteger(const std::string& sNumber) : m_bSignum{ sNumber[0] == '-
 
 BigInteger::BigInteger(int iNumber) : m_bSignum{ iNumber < 0 }
 {
+    if(m_bSignum)
+    {
+        iNumber = -iNumber;
+    }
     while (iNumber)
     {
         m_sNumber = static_cast<char>((iNumber % 10) + '0') + m_sNumber;
@@ -383,7 +387,7 @@ BigInteger operator / (const BigInteger& lhs, const BigInteger& rhs)
     if (rhs.m_sNumber != "0")
     {
         result.m_sNumber = BigInteger::Division(lhs.m_sNumber, rhs.m_sNumber);
-        result.m_bSignum = (lhs.m_bSignum && !rhs.m_bSignum) || (!lhs.m_bSignum && rhs.m_bSignum);
+        result.m_bSignum = lhs.m_bSignum != rhs.m_bSignum;
     }
     else
     {
@@ -398,7 +402,7 @@ BigInteger operator % (const BigInteger& lhs, const BigInteger& rhs)
     if (rhs.m_sNumber != "0")
     {
         result.m_sNumber = BigInteger::Remainder(lhs.m_sNumber, rhs.m_sNumber);
-        result.m_bSignum = (lhs.m_bSignum && !rhs.m_bSignum) || (!lhs.m_bSignum && rhs.m_bSignum);
+        result.m_bSignum = lhs.m_bSignum != rhs.m_bSignum;
     }
     else
     {
@@ -482,7 +486,7 @@ std::string BigInteger::Addition(const std::string& lhs, const std::string& rhs)
 	    {
 	        int iDigit = i <= iRhsLength ?
 	            (lhs[iLhsLength - i] - '0') + (rhs[iRhsLength - i] - '0') + bCarry :
-	            (rhs[iRhsLength - i] - '0') + bCarry;
+	            (rhs[iLhsLength - i] - '0') + bCarry;
 	        bCarry = iDigit > 9;
 	        sResult += bCarry ? (iDigit - 10) + '0' : iDigit + '0';
 	    }
@@ -507,7 +511,7 @@ std::string BigInteger::Addition(const std::string& lhs, const std::string& rhs)
     {
         std::swap(sResult[i], sResult[sResult.length() - i - 1]);
     }
-    return	sResult;
+    return sResult;
 }
 
 std::string BigInteger::Subtraction(const std::string& lhs, const std::string& rhs)
@@ -560,7 +564,7 @@ std::string BigInteger::Subtraction(const std::string& lhs, const std::string& r
     {
         std::swap(sResult[i], sResult[sResult.length() - i - 1]);
     }
-    return	sResult;
+    return sResult;
 }
 
 // simple version of Multiplication.
@@ -581,7 +585,7 @@ std::string BigInteger::Multiplication(std::string lhs, const std::string& rhs)
             lhs += "0";
         }
     }
-    return	sResult;
+    return sResult;
 }
 
 // Division. v1.0
