@@ -236,12 +236,20 @@ BigInteger& BigInteger::operator *= (const BigInteger& rhs)
 
 BigInteger& BigInteger::operator /= (const BigInteger& rhs)
 {
+    if (rhs.m_sNumber == "0")
+    {
+        throw std::exception();
+    }
     m_sNumber = Division(m_sNumber, rhs.m_sNumber);
     return *this;
 }
 
 BigInteger& BigInteger::operator %= (const BigInteger& rhs)
 {
+    if (rhs.m_sNumber == "0")
+    {
+        throw std::exception();
+    }
     m_sNumber = Remainder(m_sNumber, rhs.m_sNumber);
     return *this;
 }
