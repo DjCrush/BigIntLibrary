@@ -632,31 +632,17 @@ std::string BigInteger::Multiplication(std::string lhs, const std::string& rhs)
     std::string sResult = "0";
     if (lhs != "0" && rhs != "0")
     {
-        size_t iRhsLength = rhs.length();
-        size_t iLhsLength = lhs.length();
-        for (size_t j = 1; j <= iRhsLength; ++j)
+        for (size_t j = 1; j <= rhs.length(); ++j)
         {
-            int item = rhs[iRhsLength - j] - '0';
-            std::string sInterimResult;
-            int iCarry = 0;
-            for (size_t i = 1; i <= iLhsLength; ++i)
+            char item = rhs[rhs.length() - j];
+            std::string sInterimResult = "0";
+            for (char i = '0'; i < item; ++i)
             {
-                int iDigit = (lhs[iLhsLength - i] - '0') * item + iCarry;
-                sInterimResult += (iDigit % 10) + '0';
-                iCarry = iDigit / 10;
-            }
-            if (iCarry)
-            {
-                sInterimResult += iCarry + '0';
+                sInterimResult = Addition(lhs, sInterimResult);
             }
             sResult = Addition(sResult, sInterimResult);
             lhs += "0";
         }
-    }
-    size_t length = sResult.length() >> 1;
-    for (size_t i = 0; i < length; ++i)
-    {
-        std::swap(sResult[i], sResult[sResult.length() - i - 1]);
     }
     return sResult;
 }
