@@ -78,8 +78,18 @@ BigInteger::BigInteger(int64_t iNumber) : m_bSignum{ iNumber < 0 }
     }
 }
 
+BigInteger BigInteger::Abs(BigInteger x)
+{
+    x.m_bSignum = false;
+    return x;
+}
+
 BigInteger BigInteger::Sqrt(const BigInteger& x)
 {
+    if (x.m_bSignum)
+    {
+        throw std::exception();
+    }
     BigInteger result = "1" + std::string(x.m_sNumber.length() - 1, '0');
     BigInteger increment = result;
     BigInteger initialIncrement = result;
@@ -98,6 +108,51 @@ BigInteger BigInteger::Sqrt(const BigInteger& x)
             result -= increment;
             initialIncrement /= 10;
             increment = initialIncrement;
+        }
+    }
+    return result;
+}
+
+BigInteger BigInteger::Cbrt(BigInteger x)
+{
+    bool bSignum = false;
+    if (x.m_bSignum)
+    {
+        bSignum = true;
+        x.m_bSignum = false;
+    }
+    BigInteger result = "1" + std::string(x.m_sNumber.length() - 1, '0');
+    BigInteger increment = result;
+    BigInteger initialIncrement = result;
+    while (increment != 0)
+    {
+        if (result * result * result == x)
+        {
+            break;
+        }
+        else if (result * result * result < x)
+        {
+            result += increment;
+        }
+        else
+        {
+            result -= increment;
+            initialIncrement /= 10;
+            increment = initialIncrement;
+        }
+    }
+    result.m_bSignum = bSignum;
+    return result;
+}
+
+BigInteger BigInteger::Pow(const BigInteger& x, const BigInteger& y)
+{
+    BigInteger result =1;
+    if (y != 0)
+    {
+        for (BigInteger i = 0; i < y; ++i)
+        {
+            result *= x;
         }
     }
     return result;
