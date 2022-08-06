@@ -78,6 +78,31 @@ BigInteger::BigInteger(int64_t iNumber) : m_bSignum{ iNumber < 0 }
     }
 }
 
+BigInteger BigInteger::Sqrt(const BigInteger& x)
+{
+    BigInteger result = "1" + std::string(x.m_sNumber.length() - 1, '0');
+    BigInteger increment = result;
+    BigInteger initialIncrement = result;
+    while (increment != 0)
+    {
+        if (result * result == x)
+        {
+            break;
+        }
+        else if (result * result < x)
+        {
+            result += increment;
+        }
+        else
+        {
+            result -= increment;
+            initialIncrement /= 10;
+            increment = initialIncrement;
+        }
+    }
+    return result;
+}
+
 BigInteger::BigInteger(const char* lpszNumber)
 {
     if(lpszNumber[0] == 0)
