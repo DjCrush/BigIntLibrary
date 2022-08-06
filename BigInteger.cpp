@@ -95,11 +95,12 @@ BigInteger BigInteger::Sqrt(const BigInteger& x)
     BigInteger initialIncrement = result;
     while (increment != 0)
     {
-        if (result * result == x)
+	BigInteger interimResult = result * result;
+        if (interimResult == x)
         {
             break;
         }
-        else if (result * result < x)
+        else if (interimResult < x)
         {
             result += increment;
         }
@@ -126,11 +127,12 @@ BigInteger BigInteger::Cbrt(BigInteger x)
     BigInteger initialIncrement = result;
     while (increment != 0)
     {
-        if (result * result * result == x)
+	BigInteger interimResult = result * result * result;
+        if (interimResult == x)
         {
             break;
         }
-        else if (result * result * result < x)
+        else if (interimResult < x)
         {
             result += increment;
         }
