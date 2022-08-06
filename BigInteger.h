@@ -23,7 +23,10 @@ public:
 	BigInteger& operator -- ();
 	BigInteger operator -- (int);
 	
-	static BigInteger Sqrt(const BigInteger& a);
+	static BigInteger Abs(BigInteger);
+	static BigInteger Sqrt(const BigInteger&);
+	static BigInteger Cbrt(BigInteger);
+	static BigInteger Pow(const BigInteger&, const BigInteger&);
 
 private:
 	std::string m_sNumber;
