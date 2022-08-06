@@ -22,6 +22,8 @@ public:
 	BigInteger operator ++ (int);
 	BigInteger& operator -- ();
 	BigInteger operator -- (int);
+	
+	static BigInteger Sqrt(const BigInteger& a);
 
 private:
 	std::string m_sNumber;
