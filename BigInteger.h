@@ -12,6 +12,8 @@ public:
 	BigInteger(int64_t iNumber);
 	BigInteger(const char* lpszNumber);
 
+	BigInteger& operator -();
+	BigInteger& operator +();
 	BigInteger& operator -= (const BigInteger&);
 	BigInteger& operator += (const BigInteger&);
 	BigInteger& operator *= (const BigInteger&);
