@@ -149,7 +149,7 @@ BigInteger BigInteger::Cbrt(BigInteger x)
 
 BigInteger BigInteger::Pow(const BigInteger& x, const BigInteger& y)
 {
-    BigInteger result =1;
+    BigInteger result = 1;
     if (y != 0)
     {
         for (BigInteger i = 0; i < y; ++i)
@@ -171,6 +171,17 @@ BigInteger::BigInteger(const char* lpszNumber)
     {
         m_sNumber += lpszNumber[i];
     }
+}
+
+BigInteger& BigInteger::operator - ()
+{
+    m_bSignum = !m_bSignum;
+    return *this;
+}
+
+BigInteger& BigInteger::operator +()
+{
+    return *this;
 }
 
 BigInteger& BigInteger::operator -= (const BigInteger& rhs)
@@ -349,7 +360,7 @@ BigInteger& BigInteger::operator ++ ()
 BigInteger BigInteger::operator ++ (int)
 {
     BigInteger temp = *this;
-    ++* this;
+    ++*this;
     return temp;
 }
 
@@ -366,7 +377,7 @@ BigInteger& BigInteger::operator -- ()
 BigInteger BigInteger::operator -- (int)
 {
     BigInteger temp = *this;
-    --* this;
+    --*this;
     return temp;
 }
 
@@ -714,16 +725,31 @@ std::string BigInteger::Multiplication(std::string lhs, const std::string& rhs)
     std::string sResult = "0";
     if (lhs != "0" && rhs != "0")
     {
-        for (size_t j = 1; j <= rhs.length(); ++j)
+        size_t iRhsLength = rhs.length();
+        size_t iLhsLength = lhs.length();
+        for (size_t j = 1; j <= iRhsLength; ++j)
         {
-            char item = rhs[rhs.length() - j];
-            std::string sInterimResult = "0";
-            for (char i = '0'; i < item; ++i)
+            int item = rhs[iRhsLength - j] - '0';
+            std::string sInterimResult(j - 1, '0');
+            int iCarry = 0;
+            for (size_t i = 1; i <= iLhsLength; ++i)
             {
-                sInterimResult = Addition(lhs, sInterimResult);
+                int iDigit = (lhs[iLhsLength - i] - '0') * item + iCarry;
+                sInterimResult += static_cast<char>((iDigit % 10) + '0');
+                iCarry = iDigit / 10;
             }
+            if (iCarry)
+            {
+                sInterimResult += static_cast<char>(iCarry + '0');
+            }
+
+            size_t length = sInterimResult.length() >> 1;
+            for (size_t i = 0; i < length; ++i)
+            {
+                std::swap(sInterimResult[i], sInterimResult[sInterimResult.length() - i - 1]);
+            }
+
             sResult = Addition(sResult, sInterimResult);
-            lhs += "0";
         }
     }
     return sResult;
